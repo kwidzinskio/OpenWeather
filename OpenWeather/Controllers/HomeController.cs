@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using OpenWeather.Class;
+using OpenWeather.DatabaseLayer.Context;
+using OpenWeather.DatabaseLayer.Entities;
 using OpenWeather.Models;
 using System.Diagnostics;
 using System.Net;
@@ -10,15 +12,20 @@ namespace OpenWeather.Controllers
 {
     public class HomeController : Controller
     {
+        private WeatherContext context;
         private OpenWeatherApp openWeatherMap = new OpenWeatherApp();
 
+        public HomeController(WeatherContext context)
+        {
+            this.context = context;
+        }
         public ActionResult Index()
         {
             return View(openWeatherMap);
         }
 
         [HttpPost]
-        public ActionResult Index(string city)
+        public async Task<ActionResult> Index(string city)
         {
             if (city != null)
             {
@@ -33,7 +40,21 @@ namespace OpenWeather.Controllers
                     apiResponse = reader.ReadToEnd();
                 }
 
+
+
                 ResponseWeather rootObject = JsonConvert.DeserializeObject<ResponseWeather>(apiResponse);
+
+                var weatherInfo = new WeatherInfo()
+                {
+                    Base = rootObject.@base,
+                    Visibility = rootObject.visibility,
+                    Dt = rootObject.dt,
+                    IdApi = rootObject.id,
+                    Name = rootObject.name,
+                    Cod = rootObject.cod,
+                };
+                await context.WeatherInfos.AddAsync(weatherInfo);
+                await context.SaveChangesAsync();
 
                 StringBuilder sb = new StringBuilder();
                 sb.Append("<table><tr><th>Weather Description</th></tr>");

@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using OpenWeather.DatabaseLayer.Context;
+
 namespace OpenWeather
 {
     public class Program
@@ -9,6 +12,8 @@ namespace OpenWeather
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddDbContext<WeatherContext>(c => c.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseContextConnectionString")));
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
