@@ -1,0 +1,28 @@
+﻿@model OpenWeather.Models.OpenWeatherApp
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1>Implement OpenWeatherMap API in ASP.NET MVC</h1>
+@using (Html.BeginForm())
+{
+    <button id="reset" name="reset">Reset »</button>
+}
+<div id="apiDiv">
+    <h4>Select the City for Weather Report</h4>
+    @using (Html.BeginForm())
+    {
+        foreach (var city in Model.cities)
+        {
+            <span>
+                @Html.RadioButtonFor(m => m.cities, city.Value) @city.Key
+            </span>
+        }
+
+        <button name="submit">Submit</button>
+    }
+    <div id="message">@Html.Raw(Model.apiResponse)</div>
+</div>
+
+
+
