@@ -12,14 +12,12 @@
     <h4>Select the City for Weather Report</h4>
     @using (Html.BeginForm())
     {
-        foreach (var city in Model.cities)
-        {
-            <span>
-                @Html.RadioButtonFor(m => m.cities, city.Value) @city.Key
-            </span>
-        }
+        <div class="form-group">
+            @Html.LabelFor(model => model, "Wprowadź miasto:")
+            @Html.TextBoxFor(m => m.city, new { @class = "form-control" })
+        </div>
 
-        <button name="submit">Submit</button>
+        <button class="btn btn-primary">Zatwierdź</button>
     }
     <div id="message">@Html.Raw(Model.apiResponse)</div>
 </div>

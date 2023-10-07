@@ -10,33 +10,29 @@ namespace OpenWeather.Controllers
 {
     public class HomeController : Controller
     {
-        // GET: OpenWeatherMapMvc
+        private OpenWeatherApp openWeatherMap = new OpenWeatherApp();
+
         public ActionResult Index()
         {
-            OpenWeatherApp openWeatherMap = FillCity();
             return View(openWeatherMap);
         }
 
         [HttpPost]
-        public ActionResult Index(string cities)
+        public ActionResult Index(string city)
         {
-            OpenWeatherApp openWeatherMap = FillCity();
-
-            if (cities != null)
+            if (city != null)
             {
-                /*Calling API http://openweathermap.org/api */
                 string apiKey = "4032517b4f77594f74b3d1f923b2df36";
-                HttpWebRequest apiRequest = WebRequest.Create("http://api.openweathermap.org/data/2.5/weather?id=" + cities + "&appid=" + apiKey + "&units=metric") as HttpWebRequest;
+                HttpWebRequest apiRequest = WebRequest.Create("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=metric") as HttpWebRequest;
 
+                openWeatherMap.city = city;
                 string apiResponse = "";
                 using (HttpWebResponse response = apiRequest.GetResponse() as HttpWebResponse)
                 {
                     StreamReader reader = new StreamReader(response.GetResponseStream());
                     apiResponse = reader.ReadToEnd();
                 }
-                /*End*/
 
-                /*http://json2csharp.com*/
                 ResponseWeather rootObject = JsonConvert.DeserializeObject<ResponseWeather>(apiResponse);
 
                 StringBuilder sb = new StringBuilder();
@@ -58,18 +54,6 @@ namespace OpenWeather.Controllers
                 }
             }
             return View(openWeatherMap);
-        }
-
-        public OpenWeatherApp FillCity()
-        {
-            OpenWeatherApp openWeatherMap = new OpenWeatherApp();
-            openWeatherMap.cities = new Dictionary<string, string>();
-            openWeatherMap.cities.Add("Melbourne", "7839805");
-            openWeatherMap.cities.Add("Auckland", "2193734");
-            openWeatherMap.cities.Add("New Delhi", "1261481");
-            openWeatherMap.cities.Add("Abu Dhabi", "292968");
-            openWeatherMap.cities.Add("Lahore", "1172451");
-            return openWeatherMap;
         }
     }
 }

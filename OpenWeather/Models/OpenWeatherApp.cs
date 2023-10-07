@@ -4,7 +4,7 @@
     {
         public string apiResponse { get; set; }
 
-        public Dictionary<string, string> cities
+        public string city
         {
             get; set;
         }
