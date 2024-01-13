@@ -60,10 +60,10 @@ namespace OpenWeather.BusinessLogic.Services
                 sb.Append("<tr><td>Country:</td><td>" + rootObject.sys.country + "</td></tr>");
                 sb.Append("<tr><td>Current Temperature:</td><td>" + rootObject.main.temp + " °C</td></tr>");
                 sb.Append("<tr><td>Feelslike Temperature:</td><td>" + rootObject.main.feels_like + " °C</td></tr>");
-                sb.Append("<tr><td>Wind:</td><td>" + rootObject.wind.speed + " Km/h</td></tr>");
-                sb.Append("<tr><td>Humidity:</td><td>" + rootObject.main.humidity + "</td></tr>");
-                sb.Append("<tr><td>Pressure:</td><td>" + rootObject.main.pressure + " °C</td></tr>");
                 sb.Append("<tr><td>Weather:</td><td>" + rootObject.weather[0].description + "</td></tr>");
+                sb.Append("<tr><td>Wind:</td><td>" + rootObject.wind.speed + " Km/h</td></tr>");
+                sb.Append("<tr><td>Pressure:</td><td>" + rootObject.main.pressure + " °C</td></tr>");
+                sb.Append("<tr><td>Humidity:</td><td>" + rootObject.main.humidity + "</td></tr>");
                 sb.Append("<tr><td>Icon:</td><td>" + rootObject.weather[0].icon + "</td></tr>");
                 sb.Append("</table>");
 
