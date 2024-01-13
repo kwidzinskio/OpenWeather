@@ -10,7 +10,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenWeather", "OpenWeather\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenWeather.DatabaseLayer", "OpenWeather.DatabaseLayer\OpenWeather.DatabaseLayer.csproj", "{22E576C0-B168-402C-88B8-EFC1583C6AD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenWeather.BusinessLogic", "OpenWeather.BusinessLogic\OpenWeather.BusinessLogic.csproj", "{D2DBF6C1-ACE3-428D-806D-F5D9A5B0D74A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenWeather.BusinessLogic", "OpenWeather.BusinessLogic\OpenWeather.BusinessLogic.csproj", "{D2DBF6C1-ACE3-428D-806D-F5D9A5B0D74A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{22E576C0-B168-402C-88B8-EFC1583C6AD7} = {22E576C0-B168-402C-88B8-EFC1583C6AD7}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

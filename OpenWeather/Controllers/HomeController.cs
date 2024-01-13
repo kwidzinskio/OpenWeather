@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using OpenWeather.Class;
 using OpenWeather.DatabaseLayer.Context;
 using OpenWeather.DatabaseLayer.Entities;
 using System.Diagnostics;
 using System.Net;
 using System.Text;
 using OpenWeather.BusinessLogic.Services;
+using OpenWeather.Models;
 
 namespace OpenWeather.Controllers
 {
