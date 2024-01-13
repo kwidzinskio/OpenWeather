@@ -46,6 +46,7 @@ namespace OpenWeather.Controllers
         [HttpGet]
         public async Task<ActionResult> Add()
         {
+            await weatherService.GetWeatherSet();
             return View();
         }
     }
