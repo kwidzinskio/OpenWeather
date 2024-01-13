@@ -40,8 +40,6 @@ namespace OpenWeather.Controllers
                     apiResponse = reader.ReadToEnd();
                 }
 
-
-
                 ResponseWeather rootObject = JsonConvert.DeserializeObject<ResponseWeather>(apiResponse);
 
                 var weatherInfo = new WeatherInfo()
@@ -51,7 +49,6 @@ namespace OpenWeather.Controllers
                     Dt = rootObject.dt,
                     IdApi = rootObject.id,
                     Name = rootObject.name,
-                    Cod = rootObject.cod,
                 };
                 await context.WeatherInfos.AddAsync(weatherInfo);
                 await context.SaveChangesAsync();
@@ -60,9 +57,11 @@ namespace OpenWeather.Controllers
                 sb.Append("<table><tr><th>Weather Description</th></tr>");
                 sb.Append("<tr><td>City:</td><td>" + rootObject.name + "</td></tr>");
                 sb.Append("<tr><td>Country:</td><td>" + rootObject.sys.country + "</td></tr>");
-                sb.Append("<tr><td>Wind:</td><td>" + rootObject.wind.speed + " Km/h</td></tr>");
                 sb.Append("<tr><td>Current Temperature:</td><td>" + rootObject.main.temp + " °C</td></tr>");
+                sb.Append("<tr><td>Feelslike Temperature:</td><td>" + rootObject.main.feels_like + " °C</td></tr>");
+                sb.Append("<tr><td>Wind:</td><td>" + rootObject.wind.speed + " Km/h</td></tr>");
                 sb.Append("<tr><td>Humidity:</td><td>" + rootObject.main.humidity + "</td></tr>");
+                sb.Append("<tr><td>Pressure:</td><td>" + rootObject.main.pressure + " °C</td></tr>");
                 sb.Append("<tr><td>Weather:</td><td>" + rootObject.weather[0].description + "</td></tr>");
                 sb.Append("</table>");
                 openWeatherMap.apiResponse = sb.ToString();
