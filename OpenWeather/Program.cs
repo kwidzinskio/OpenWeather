@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using OpenWeather.BusinessLogic.Services;
 using OpenWeather.DatabaseLayer.Context;
 
 namespace OpenWeather
@@ -12,6 +13,7 @@ namespace OpenWeather
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddScoped<IWeatherService, WeatherService>();
             builder.Services.AddDbContext<WeatherContext>(c => c.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseContextConnectionString")));
             
             var app = builder.Build();

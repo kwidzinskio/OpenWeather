@@ -1,4 +1,4 @@
-﻿namespace OpenWeather.Class
+﻿namespace OpenWeather.BusinessLogic.Models
 {
     public class OpenWeatherMapApi
     {

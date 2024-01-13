@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OpenWeather.BusinessLogic\OpenWeather.BusinessLogic.csproj" />
     <ProjectReference Include="..\OpenWeather.DatabaseLayer\OpenWeather.DatabaseLayer.csproj" />
   </ItemGroup>
 
