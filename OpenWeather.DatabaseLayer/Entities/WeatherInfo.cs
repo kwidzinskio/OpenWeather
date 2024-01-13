@@ -16,6 +16,12 @@ namespace OpenWeather.DatabaseLayer.Entities
         public int Dt { get; set; }
         public int IdApi { get; set; }
         public string Name { get; set; }
-        public int Cod { get; set; }
+        public string Country { get; set; }
+        public string Descrpition { get; set; }
+        public int Pressure { get; set; }
+        public int Humidity { get; set; }
+        public double WindSpeed { get; set; }
+        public double TempFeelsLike { get; set; }
+        public double Temp { get; set; }
     }
 }

@@ -49,6 +49,13 @@ namespace OpenWeather.Controllers
                     Dt = rootObject.dt,
                     IdApi = rootObject.id,
                     Name = rootObject.name,
+                    Country = rootObject.sys.country,
+                    Descrpition = rootObject.weather[0].description,
+                    Pressure = rootObject.main.pressure,
+                    Humidity = rootObject.main.humidity,
+                    WindSpeed = rootObject.wind.speed,
+                    TempFeelsLike = rootObject.main.feels_like,
+                    Temp = rootObject.main.temp
                 };
                 await context.WeatherInfos.AddAsync(weatherInfo);
                 await context.SaveChangesAsync();
