@@ -44,18 +44,17 @@ namespace OpenWeather.Controllers
 
                 var weatherInfo = new WeatherInfo()
                 {
-                    Base = rootObject.@base,
                     Visibility = rootObject.visibility,
                     Dt = rootObject.dt,
                     IdApi = rootObject.id,
                     Name = rootObject.name,
                     Country = rootObject.sys.country,
                     Descrpition = rootObject.weather[0].description,
-                    Pressure = rootObject.main.pressure,
                     Humidity = rootObject.main.humidity,
                     WindSpeed = rootObject.wind.speed,
                     TempFeelsLike = rootObject.main.feels_like,
-                    Temp = rootObject.main.temp
+                    Temp = rootObject.main.temp,
+                    Icon = rootObject.weather[0].icon
                 };
                 await context.WeatherInfos.AddAsync(weatherInfo);
                 await context.SaveChangesAsync();
@@ -70,6 +69,7 @@ namespace OpenWeather.Controllers
                 sb.Append("<tr><td>Humidity:</td><td>" + rootObject.main.humidity + "</td></tr>");
                 sb.Append("<tr><td>Pressure:</td><td>" + rootObject.main.pressure + " °C</td></tr>");
                 sb.Append("<tr><td>Weather:</td><td>" + rootObject.weather[0].description + "</td></tr>");
+                sb.Append("<tr><td>Icon:</td><td>" + rootObject.weather[0].icon + "</td></tr>");
                 sb.Append("</table>");
                 openWeatherMap.apiResponse = sb.ToString();
             }

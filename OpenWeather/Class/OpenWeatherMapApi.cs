@@ -41,5 +41,6 @@
         public Sys sys { get; set; }
         public int id { get; set; }
         public string name { get; set; }
+        public string icon { get; set; }
     }
 }
