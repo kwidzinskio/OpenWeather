@@ -42,5 +42,11 @@ namespace OpenWeather.Controllers
             }
             return View(openWeatherMap);
         }
+
+        [HttpGet]
+        public async Task<ActionResult> Add()
+        {
+            return View();
+        }
     }
 }
