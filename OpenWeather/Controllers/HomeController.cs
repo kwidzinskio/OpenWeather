@@ -31,9 +31,9 @@ namespace OpenWeather.Controllers
         [HttpPost]
         public async Task<ActionResult> Index(string selectedCities, string action)
         {
-            List<string> cities = selectedCities.Split(',').ToList();
-            if (cities != null)
+            if (!string.IsNullOrEmpty(selectedCities))
             {
+                List<string> cities = selectedCities.Split(',').ToList();
                 string weatherInfo;
                 switch (action)
                 {
@@ -45,22 +45,25 @@ namespace OpenWeather.Controllers
                         weatherInfo = await weatherService.GetHistorytWeather(cities);
                         openWeatherMap.response = weatherInfo;
                         break;
-                    /*case "downloadLast":
-                        weatherInfo = await weatherService.GetWeatherSearch("Paris");
-                        openWeatherMap.response = weatherInfo;
-                        break;
-                    case "downloadHistory":
-                        weatherInfo = await weatherService.GetWeatherSearch("qqq");
-                        openWeatherMap.response = weatherInfo;
-                        break;*/
+                    case "downloadLast":
+                        var csv = await weatherService.ConvertCurrentWeatherToCsv(cities);
+
+                        var byteArray = Encoding.ASCII.GetBytes(csv);
+                        var stream = new MemoryStream(byteArray);
+
+                        return File(stream, "text/csv", "weatherData.csv");
+                     case "downloadHistory":
+                        var csv2 = await weatherService.ConvertHistoryWeatherToCsv(cities);
+
+                        var byteArray2 = Encoding.ASCII.GetBytes(csv2);
+                        var stream2 = new MemoryStream(byteArray2);
+
+                        return File(stream2, "text/csv", "weatherData.csv");
                 }
             }
             else
             {
-                if (string.IsNullOrEmpty(Request.Form["submit"].ToString()))
-                {
-                    openWeatherMap.response = "Input City Name";
-                }
+                 openWeatherMap.response = "Choose city first";
             }
 
             return View(openWeatherMap);

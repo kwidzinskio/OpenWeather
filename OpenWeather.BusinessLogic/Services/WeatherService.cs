@@ -89,6 +89,43 @@ namespace OpenWeather.BusinessLogic.Services
             return sb.ToString();
         }
 
+        public async Task<string> ConvertCurrentWeatherToCsv(List<string> cities)
+        {
+            var repository = weatherInfoRepositoryFactory.Create();
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("Country, City, Temperature, TemperatureFeelsLike, Descriptiom, WindSpeed, Humidity, Date");
+
+            foreach (var city in cities)
+            {
+                var info = await repository.GetCurrentWeather(city);
+
+                stringBuilder.AppendLine($"{info.Country}, {info.Name}, {info.Temp}, {info.TempFeelsLike}, {info.Descrpition}, {info.WindSpeed}, {info.Humidity}, {info.Dt}");
+            }
+            var fileContent = stringBuilder.ToString();
+
+            return fileContent;
+        }
+
+        public async Task<string> ConvertHistoryWeatherToCsv(List<string> cities)
+        {
+            var repository = weatherInfoRepositoryFactory.Create();
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("Country, City, Temperature, TemperatureFeelsLike, Descriptiom, WindSpeed, Humidity, Date");
+
+            foreach (var city in cities)
+            {
+                var info = await repository.GetHistoryWeather(city);
+
+                for (int i = 0; i < info.Count; i++)
+                {
+                    stringBuilder.AppendLine($"{info[i].Country}, {info[i].Name}, {info[i].Temp}, {info[i].TempFeelsLike}, {info[i].Descrpition}, {info[i].WindSpeed}, {info[i].Humidity}, {info[i].Dt}");
+                }
+            }
+            var fileContent = stringBuilder.ToString();
+
+            return fileContent;
+        }
+
 
         public async Task GetWeatherSet()
         {

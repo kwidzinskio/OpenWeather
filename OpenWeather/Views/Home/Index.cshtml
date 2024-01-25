@@ -29,7 +29,7 @@
         <button type="submit" name="action" value="showLast" class="btn btn-primary">Show Last</button>
         <button type="submit" name="action" value="showHistory" class="btn btn-primary">Show All</button>
         <button type="submit" name="action" value="downloadLast" class="btn btn-primary">Download Last</button>
-        <button type="submit" name="action" value="downloadAll" class="btn btn-primary">Download All</button>
+        <button type="submit" name="action" value="downloadHistory" class="btn btn-primary">Download All</button>
     }
 
     <div id="message">@Html.Raw(Model.response)</div>
@@ -50,7 +50,6 @@
                 }
             }
 
-            // Tworzenie ukrytego inputa z wybranymi miastami
             var hiddenInputCities = document.createElement("input");
             hiddenInputCities.type = "hidden";
             hiddenInputCities.name = "selectedCities";
