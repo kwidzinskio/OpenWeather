@@ -7,34 +7,55 @@
 
 <div id="apiDiv">
     <h4>Select the City for Weather Report</h4>
-    @using (Html.BeginForm())
+
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "weatherForm" }))
     {
         <div class="form-group">
-            @Html.LabelFor(model => model, "Wprowadź miasto:")
-            @Html.TextBoxFor(m => m.city, new { @class = "form-control" })
+            <label>Choose City:</label>
+            <br />
+            <input type="checkbox" name="cities" value="Paris" id="Paris" />
+            <label for="Paris">Paris</label>
+            <br />
+            <input type="checkbox" name="cities" value="London" id="London" />
+            <label for="London">London</label>
+            <br />
+            <input type="checkbox" name="cities" value="Beijing" id="Beijing" />
+            <label for="Beijing">Beijing</label>
+            <br />
+            <input type="checkbox" name="cities" value="Washington" id="Washington" />
+            <label for="Washington">Washington</label>
         </div>
 
-        <button class="btn btn-primary">Szukaj</button>
+        <button type="submit" name="action" value="showLast" class="btn btn-primary">Show Last</button>
+        <button type="submit" name="action" value="showHistory" class="btn btn-primary">Show All</button>
+        <button type="submit" name="action" value="downloadLast" class="btn btn-primary">Download Last</button>
+        <button type="submit" name="action" value="downloadAll" class="btn btn-primary">Download All</button>
     }
 
-    <a class="title-a" asp-area="" asp-controller="" asp-action="Dummy">
-        <button class="btn btn-primary">XXX</button>
-    </a>
-
-    <a class="title-a" asp-area="" asp-controller="" asp-action="Dummy">
-        <button class="btn btn-primary">XXX</button>
-    </a>
-
-    <a class="title-a" asp-area="" asp-controller="" asp-action="Dummy">
-        <button class="btn btn-primary">XXX</button>
-    </a>
-
-    <a class="title-a" asp-area="" asp-controller="" asp-action="Dummy">
-        <button class="btn btn-primary">XXX</button>
-    </a>
-
-    <div id="message">@Html.Raw(Model.apiResponse)</div>
+    <div id="message">@Html.Raw(Model.response)</div>
 </div>
 
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var form = document.getElementById("weatherForm");
 
+        form.addEventListener("submit", function (event) {
+            var checkboxes = document.getElementsByName("cities");
+            var selectedCities = [];
+
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].checked) {
+                    selectedCities.push(checkboxes[i].value);
+                }
+            }
+
+            // Tworzenie ukrytego inputa z wybranymi miastami
+            var hiddenInputCities = document.createElement("input");
+            hiddenInputCities.type = "hidden";
+            hiddenInputCities.name = "selectedCities";
+            hiddenInputCities.value = selectedCities.join(",");
+            form.appendChild(hiddenInputCities);
+        });
+    });
+</script>

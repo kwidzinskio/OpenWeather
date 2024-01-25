@@ -2,7 +2,7 @@
 {
     public class OpenWeatherApp
     {
-        public string apiResponse { get; set; }
+        public string response { get; set; }
 
         public string city
         {

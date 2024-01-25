@@ -29,20 +29,40 @@ namespace OpenWeather.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Index(string city)
+        public async Task<ActionResult> Index(string selectedCities, string action)
         {
-            if (city != null)
+            List<string> cities = selectedCities.Split(',').ToList();
+            if (cities != null)
             {
-                string weatherInfo = await weatherService.GetWeatherSearch(city);
-                openWeatherMap.apiResponse = weatherInfo;
+                string weatherInfo;
+                switch (action)
+                {
+                    case "showLast":
+                        weatherInfo = await weatherService.GetWeatherSearch(cities[0]);
+                        openWeatherMap.response = weatherInfo;
+                        break;
+                    case "showHistory":
+                        weatherInfo = await weatherService.GetWeatherSearch("Paris");
+                        openWeatherMap.response = weatherInfo;
+                        break;
+                    case "downloadLast":
+                        weatherInfo = await weatherService.GetWeatherSearch("Paris");
+                        openWeatherMap.response = weatherInfo;
+                        break;
+                    case "downloadHistory":
+                        weatherInfo = await weatherService.GetWeatherSearch("qqq");
+                        openWeatherMap.response = weatherInfo;
+                        break;
+                }
             }
             else
             {
                 if (string.IsNullOrEmpty(Request.Form["submit"].ToString()))
                 {
-                    openWeatherMap.apiResponse = "Input City Name";
+                    openWeatherMap.response = "Input City Name";
                 }
             }
+
             return View(openWeatherMap);
         }
 
