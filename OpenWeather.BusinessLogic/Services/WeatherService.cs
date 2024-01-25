@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using OpenWeather.BusinessLogic.Helpers;
 using OpenWeather.BusinessLogic.Models;
 using OpenWeather.DatabaseLayer.Entities;
 using OpenWeather.DatabaseLayer.Repositories;
@@ -17,40 +18,20 @@ namespace OpenWeather.BusinessLogic.Services
     {
         private readonly IWeatherInfoRepository weatherInfoRepository;
         private readonly IConfiguration configuration;
+        private readonly string apiKey;
         public WeatherService(IWeatherInfoRepository _weatherInfoRepository, IConfiguration _configuration)
         {
             weatherInfoRepository = _weatherInfoRepository;
             configuration = _configuration;
+            apiKey = configuration.GetSection("ApiKey").Value;
         }
         public async Task<string> GetWeatherSearch(string city)
         {
-            string apiKey = configuration.GetSection("ApiKey").Value;
             try
             {
                 HttpWebRequest apiRequest = WebRequest.Create("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=metric") as HttpWebRequest;
 
-                string apiResponse = "";
-                using (HttpWebResponse response = apiRequest.GetResponse() as HttpWebResponse)
-                {
-                    StreamReader reader = new StreamReader(response.GetResponseStream());
-                    apiResponse = reader.ReadToEnd();
-                }
-                ResponseWeather rootObject = JsonConvert.DeserializeObject<ResponseWeather>(apiResponse);
-
-                var weatherInfo = new WeatherInfo()
-                {
-                    Visibility = rootObject.visibility,
-                    Dt = rootObject.dt,
-                    IdApi = rootObject.id,
-                    Name = rootObject.name,
-                    Country = rootObject.sys.country,
-                    Descrpition = rootObject.weather[0].description,
-                    Humidity = rootObject.main.humidity,
-                    WindSpeed = rootObject.wind.speed,
-                    TempFeelsLike = rootObject.main.feels_like,
-                    Temp = rootObject.main.temp,
-                    Icon = rootObject.weather[0].icon
-                };
+                var (rootObject, weatherInfo) = GetApiResponse.GetResponse(apiRequest);
 
                 await weatherInfoRepository.AddWeatherInfo(weatherInfo);
 
@@ -77,7 +58,6 @@ namespace OpenWeather.BusinessLogic.Services
 
         public async Task GetWeatherSet()
         {
-            string apiKey = configuration.GetSection("ApiKey").Value;
             Cities cities = new Cities();
 
             foreach (var city in cities.ReadonlyCities)
@@ -86,28 +66,7 @@ namespace OpenWeather.BusinessLogic.Services
                 {
                     HttpWebRequest apiRequest = WebRequest.Create("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=metric") as HttpWebRequest;
 
-                    string apiResponse = "";
-                    using (HttpWebResponse response = apiRequest.GetResponse() as HttpWebResponse)
-                    {
-                        StreamReader reader = new StreamReader(response.GetResponseStream());
-                        apiResponse = reader.ReadToEnd();
-                    }
-                    ResponseWeather rootObject = JsonConvert.DeserializeObject<ResponseWeather>(apiResponse);
-
-                    var weatherInfo = new WeatherInfo()
-                    {
-                        Visibility = rootObject.visibility,
-                        Dt = rootObject.dt,
-                        IdApi = rootObject.id,
-                        Name = rootObject.name,
-                        Country = rootObject.sys.country,
-                        Descrpition = rootObject.weather[0].description,
-                        Humidity = rootObject.main.humidity,
-                        WindSpeed = rootObject.wind.speed,
-                        TempFeelsLike = rootObject.main.feels_like,
-                        Temp = rootObject.main.temp,
-                        Icon = rootObject.weather[0].icon
-                    };
+                    var (rootObject, weatherInfo) = GetApiResponse.GetResponse(apiRequest);
 
                     await weatherInfoRepository.AddWeatherInfo(weatherInfo);
 
@@ -117,8 +76,6 @@ namespace OpenWeather.BusinessLogic.Services
 
                 }
             }
-
-            
         }
     }
 }
