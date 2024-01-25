@@ -38,21 +38,21 @@ namespace OpenWeather.Controllers
                 switch (action)
                 {
                     case "showLast":
-                        weatherInfo = await weatherService.GetWeatherSearch(cities[0]);
+                        weatherInfo = await weatherService.GetCurrentWeather(cities);
                         openWeatherMap.response = weatherInfo;
                         break;
                     case "showHistory":
-                        weatherInfo = await weatherService.GetWeatherSearch("Paris");
+                        weatherInfo = await weatherService.GetHistorytWeather(cities);
                         openWeatherMap.response = weatherInfo;
                         break;
-                    case "downloadLast":
+                    /*case "downloadLast":
                         weatherInfo = await weatherService.GetWeatherSearch("Paris");
                         openWeatherMap.response = weatherInfo;
                         break;
                     case "downloadHistory":
                         weatherInfo = await weatherService.GetWeatherSearch("qqq");
                         openWeatherMap.response = weatherInfo;
-                        break;
+                        break;*/
                 }
             }
             else

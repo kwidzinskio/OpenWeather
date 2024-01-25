@@ -36,29 +36,59 @@ namespace OpenWeather.BusinessLogic.Services
             weatherInfoRepositoryFactory = _weatherInfoRepositoryFactory;
             httpClient = _httpClient;
         }
-        public async Task<string> GetWeatherSearch(string city)
+        public async Task<string> GetCurrentWeather(List<string> cities)
         {
-            string url = $"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apiKey}&units=metric";
-
-            var (rootObject, weatherInfo) = await GetApiResponse.GetResponseAsync(httpClient, url);
-
-            await weatherInfoRepository.AddWeatherInfo(weatherInfo);
-
+            var repository = weatherInfoRepositoryFactory.Create();
             StringBuilder sb = new StringBuilder();
-            sb.Append("<table><tr><th>Weather Description</th></tr>");
-            sb.Append("<tr><td>City:</td><td>" + rootObject.name + "</td></tr>");
-            sb.Append("<tr><td>Country:</td><td>" + rootObject.sys.country + "</td></tr>");
-            sb.Append("<tr><td>Current Temperature:</td><td>" + rootObject.main.temp + " °C</td></tr>");
-            sb.Append("<tr><td>Feelslike Temperature:</td><td>" + rootObject.main.feels_like + " °C</td></tr>");
-            sb.Append("<tr><td>Weather:</td><td>" + rootObject.weather[0].description + "</td></tr>");
-            sb.Append("<tr><td>Wind:</td><td>" + rootObject.wind.speed + " Km/h</td></tr>");
-            sb.Append("<tr><td>Pressure:</td><td>" + rootObject.main.pressure + " °C</td></tr>");
-            sb.Append("<tr><td>Humidity:</td><td>" + rootObject.main.humidity + "</td></tr>");
-            sb.Append("<tr><td>Icon:</td><td>" + rootObject.weather[0].icon + "</td></tr>");
-            sb.Append("</table>");
+
+            foreach (var city in cities)
+            {
+                var rootObject = await repository.GetCurrentWeather(city);
+
+                sb.Append("<tr>");
+                sb.Append("<table><tr><th>Weather Description</th></tr>");
+                sb.Append("<tr><td>City:</td><td>" + rootObject.Name + "</td></tr>");
+                sb.Append("<tr><td>Country:</td><td>" + rootObject.Country + "</td></tr>");
+                sb.Append("<tr><td>Current Temperature:</td><td>" + rootObject.Temp + " °C</td></tr>");
+                sb.Append("<tr><td>Feelslike Temperature:</td><td>" + rootObject.TempFeelsLike + " °C</td></tr>");
+                sb.Append("<tr><td>Weather:</td><td>" + rootObject.Descrpition + "</td></tr>");
+                sb.Append("<tr><td>Wind:</td><td>" + rootObject.WindSpeed + " Km/h</td></tr>");
+                sb.Append("<tr><td>Humidity:</td><td>" + rootObject.Humidity + "</td></tr>");
+                sb.Append("<tr><td>Icon:</td><td>" + rootObject.Icon + "</td></tr>");
+                sb.Append("</tr></table>");
+            }
 
             return sb.ToString();
         }
+
+        public async Task<string> GetHistorytWeather(List<string> cities)
+        {
+            var repository = weatherInfoRepositoryFactory.Create();
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var city in cities)
+            {
+                var rootObject = await repository.GetHistoryWeather(city);
+
+                for (int i = 0; i < rootObject.Count; i++)
+                {
+                    sb.Append("<tr>");
+                    sb.Append("<table><tr><th>Weather Description</th></tr>");
+                    sb.Append("<tr><td>City:</td><td>" + rootObject[i].Name + "</td></tr>");
+                    sb.Append("<tr><td>Country:</td><td>" + rootObject[i].Country + "</td></tr>");
+                    sb.Append("<tr><td>Current Temperature:</td><td>" + rootObject[i].Temp + " °C</td></tr>");
+                    sb.Append("<tr><td>Feelslike Temperature:</td><td>" + rootObject[i].TempFeelsLike + " °C</td></tr>");
+                    sb.Append("<tr><td>Weather:</td><td>" + rootObject[i].Descrpition + "</td></tr>");
+                    sb.Append("<tr><td>Wind:</td><td>" + rootObject[i].WindSpeed + " Km/h</td></tr>");
+                    sb.Append("<tr><td>Humidity:</td><td>" + rootObject[i].Humidity + "</td></tr>");
+                    sb.Append("<tr><td>Icon:</td><td>" + rootObject[i].Icon + "</td></tr>");
+                    sb.Append("</tr></table>");
+                }
+            }
+
+            return sb.ToString();
+        }
+
 
         public async Task GetWeatherSet()
         {

@@ -1,10 +1,13 @@
-﻿using OpenWeather.DatabaseLayer.Context;
+﻿using Microsoft.Extensions.Logging;
+using OpenWeather.DatabaseLayer.Context;
 using OpenWeather.DatabaseLayer.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 
 namespace OpenWeather.DatabaseLayer.Repositories
 {
@@ -20,6 +23,27 @@ namespace OpenWeather.DatabaseLayer.Repositories
         {
             await context.WeatherInfos.AddAsync(weatherInfo);
             await context.SaveChangesAsync();
+        }
+
+        public async Task<WeatherInfo> GetCurrentWeather(string city)
+        {
+            var weatherInfo = await context.WeatherInfos
+                                           .Where(e => e.Name.Equals(city))
+                                           .OrderByDescending(e => e.Dt)
+                                           .FirstOrDefaultAsync();
+
+            return weatherInfo;
+        }
+
+        public async Task<List<WeatherInfo>> GetHistoryWeather(string city)
+        {
+            string sqlQuery = "SELECT TOP 5 * FROM WeatherInfos WHERE Name = @city ORDER BY NEWID()";
+
+            var weatherInfos = await context.WeatherInfos
+                                            .FromSqlRaw(sqlQuery, new SqlParameter("@city", city))
+                                            .ToListAsync();
+
+            return weatherInfos;
         }
     }
 }

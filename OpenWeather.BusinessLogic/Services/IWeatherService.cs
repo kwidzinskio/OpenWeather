@@ -8,7 +8,8 @@ namespace OpenWeather.BusinessLogic.Services
 {
     public interface IWeatherService
     {
-        Task<string> GetWeatherSearch(string city);
+        Task<string> GetCurrentWeather(List<string> cities);
+        Task<string> GetHistorytWeather(List<string> cities);
         Task GetWeatherSet();
     }
 }
