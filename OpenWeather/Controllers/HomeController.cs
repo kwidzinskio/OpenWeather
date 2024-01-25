@@ -17,18 +17,10 @@ namespace OpenWeather.Controllers
     {
         private OpenWeatherApp openWeatherMap = new OpenWeatherApp();
         private readonly IWeatherService weatherService;
-        private Timer timer;
 
         public HomeController(IWeatherService weatherService)
         {
             this.weatherService = weatherService;
-            timer = new Timer(ExecuteAsync, null, 0, 10000);
-        }
-
-        private async void ExecuteAsync(object state)
-        {
-            Console.WriteLine("... fetching data ...");
-            await weatherService.GetWeatherSet();
         }
 
         public ActionResult Index()

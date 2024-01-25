@@ -12,13 +12,12 @@ namespace OpenWeather.BusinessLogic.Models
 
         public Cities()
         {
-            // Inicjalizacja listy 4 stringami
             cities = new List<string> { "London", "Paris", "Tokyo", "Washington" }.AsReadOnly();
         }
 
-        public IEnumerable<string> ReadonlyCities
+        public IEnumerable<string> Read()
         {
-            get { return cities; }
+            return cities;
         }
     }
 }

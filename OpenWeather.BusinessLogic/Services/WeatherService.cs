@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -17,63 +18,58 @@ namespace OpenWeather.BusinessLogic.Services
 {
     public class WeatherService : IWeatherService
     {
-        private readonly IWeatherInfoRepository weatherInfoRepository;
         private readonly IConfiguration configuration;
         private readonly string apiKey;
+        private readonly Cities cities = new Cities();
+        private readonly IWeatherInfoRepository weatherInfoRepository;
         private readonly IWeatherInfoRepositoryFactory weatherInfoRepositoryFactory;
-        public WeatherService(IWeatherInfoRepository _weatherInfoRepository, IConfiguration _configuration, IWeatherInfoRepositoryFactory _weatherInfoRepositoryFactory)
+        private readonly HttpClient httpClient;
+
+        public WeatherService(IWeatherInfoRepository _weatherInfoRepository, 
+                              IConfiguration _configuration, 
+                              IWeatherInfoRepositoryFactory _weatherInfoRepositoryFactory, 
+                              HttpClient _httpClient)
         {
             weatherInfoRepository = _weatherInfoRepository;
             configuration = _configuration;
             apiKey = configuration.GetSection("ApiKey").Value;
             weatherInfoRepositoryFactory = _weatherInfoRepositoryFactory;
+            httpClient = _httpClient;
         }
         public async Task<string> GetWeatherSearch(string city)
         {
-            try
-            {
-                HttpWebRequest apiRequest = WebRequest.Create("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=metric") as HttpWebRequest;
+            string url = $"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apiKey}&units=metric";
 
-                var (rootObject, weatherInfo) = GetApiResponse.GetResponse(apiRequest);
+            var (rootObject, weatherInfo) = await GetApiResponse.GetResponseAsync(httpClient, url);
 
-                await weatherInfoRepository.AddWeatherInfo(weatherInfo);
+            await weatherInfoRepository.AddWeatherInfo(weatherInfo);
 
-                StringBuilder sb = new StringBuilder();
-                sb.Append("<table><tr><th>Weather Description</th></tr>");
-                sb.Append("<tr><td>City:</td><td>" + rootObject.name + "</td></tr>");
-                sb.Append("<tr><td>Country:</td><td>" + rootObject.sys.country + "</td></tr>");
-                sb.Append("<tr><td>Current Temperature:</td><td>" + rootObject.main.temp + " °C</td></tr>");
-                sb.Append("<tr><td>Feelslike Temperature:</td><td>" + rootObject.main.feels_like + " °C</td></tr>");
-                sb.Append("<tr><td>Weather:</td><td>" + rootObject.weather[0].description + "</td></tr>");
-                sb.Append("<tr><td>Wind:</td><td>" + rootObject.wind.speed + " Km/h</td></tr>");
-                sb.Append("<tr><td>Pressure:</td><td>" + rootObject.main.pressure + " °C</td></tr>");
-                sb.Append("<tr><td>Humidity:</td><td>" + rootObject.main.humidity + "</td></tr>");
-                sb.Append("<tr><td>Icon:</td><td>" + rootObject.weather[0].icon + "</td></tr>");
-                sb.Append("</table>");
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<table><tr><th>Weather Description</th></tr>");
+            sb.Append("<tr><td>City:</td><td>" + rootObject.name + "</td></tr>");
+            sb.Append("<tr><td>Country:</td><td>" + rootObject.sys.country + "</td></tr>");
+            sb.Append("<tr><td>Current Temperature:</td><td>" + rootObject.main.temp + " °C</td></tr>");
+            sb.Append("<tr><td>Feelslike Temperature:</td><td>" + rootObject.main.feels_like + " °C</td></tr>");
+            sb.Append("<tr><td>Weather:</td><td>" + rootObject.weather[0].description + "</td></tr>");
+            sb.Append("<tr><td>Wind:</td><td>" + rootObject.wind.speed + " Km/h</td></tr>");
+            sb.Append("<tr><td>Pressure:</td><td>" + rootObject.main.pressure + " °C</td></tr>");
+            sb.Append("<tr><td>Humidity:</td><td>" + rootObject.main.humidity + "</td></tr>");
+            sb.Append("<tr><td>Icon:</td><td>" + rootObject.weather[0].icon + "</td></tr>");
+            sb.Append("</table>");
 
-                return sb.ToString();
-            }
-            catch (Exception ex)
-            {
-                return "No data";
-            }
+            return sb.ToString();
         }
 
         public async Task GetWeatherSet()
         {
-            Cities cities = new Cities();
+            var repository = weatherInfoRepositoryFactory.Create();
 
-            foreach (var city in cities.ReadonlyCities)
+            foreach (var city in cities.Read())
             {
-                var xxx = weatherInfoRepositoryFactory.Create();
-                
-                    HttpWebRequest apiRequest = WebRequest.Create("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=metric") as HttpWebRequest;
+                string url = $"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apiKey}&units=metric";
+                var (rootObject, weatherInfo) = await GetApiResponse.GetResponseAsync(httpClient, url);
 
-                    var (rootObject, weatherInfo) = GetApiResponse.GetResponse(apiRequest);
-
-                    await xxx.AddWeatherInfo(weatherInfo);
-                    //await dbContext.SaveChangesAsync();
-                
+                await repository.AddWeatherInfo(weatherInfo);
             }
         }
     }
