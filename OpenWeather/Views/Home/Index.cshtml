@@ -17,12 +17,12 @@
             @Html.TextBoxFor(m => m.city, new { @class = "form-control" })
         </div>
 
-        <button class="btn btn-primary">Zatwierdź</button>
+        <button class="btn btn-primary">Szukaj</button>
     }
     <div id="message">@Html.Raw(Model.apiResponse)</div>
 </div>
 
 <a class="title-a" asp-area="" asp-controller="" asp-action="Add">
-    <button class="btn btn-b">Zarejestruj się</button>
+    <button class="btn btn-primary">Pobierz set</button>
 </a>
 
