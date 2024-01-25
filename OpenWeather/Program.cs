@@ -19,7 +19,7 @@ namespace OpenWeather
                 c.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseContextConnectionString")));
             builder.Services.AddScoped<IWeatherService, WeatherService>();
             builder.Services.AddScoped<IWeatherInfoRepository, WeatherInfoRepository>();
-            builder.Services.AddTransient<IWeatherContextFactory, WeatherContextFactory>();
+            builder.Services.AddTransient<IWeatherInfoRepositoryFactory, WeatherInfoRepositoryFactory>();
             //builder.Services.AddHostedService<WeatherInfoFetch>();
             var app = builder.Build();
 

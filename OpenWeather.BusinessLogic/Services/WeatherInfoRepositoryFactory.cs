@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using OpenWeather.DatabaseLayer.Context;
+using OpenWeather.DatabaseLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,21 +10,22 @@ using System.Threading.Tasks;
 
 namespace OpenWeather.BusinessLogic.Services
 {
-    public class WeatherContextFactory : IWeatherContextFactory
+    public class WeatherInfoRepositoryFactory : IWeatherInfoRepositoryFactory
     {
         private readonly IConfiguration configuration;
 
-        public WeatherContextFactory(IConfiguration configuration)
+        public WeatherInfoRepositoryFactory(IConfiguration configuration)
         {
             this.configuration = configuration;
         }
 
-        public WeatherContext CreateDbContext()
+        public WeatherInfoRepository Create()
         {
             var optionsBuilder = new DbContextOptionsBuilder<WeatherContext>();
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("DatabaseContextConnectionString"));
 
-            return new WeatherContext(optionsBuilder.Options);
+            var context = new WeatherContext(optionsBuilder.Options);
+            return new WeatherInfoRepository(context);
         }
     }
 }

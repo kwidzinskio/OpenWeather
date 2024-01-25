@@ -20,13 +20,13 @@ namespace OpenWeather.BusinessLogic.Services
         private readonly IWeatherInfoRepository weatherInfoRepository;
         private readonly IConfiguration configuration;
         private readonly string apiKey;
-        private readonly IWeatherContextFactory contextFactory;
-        public WeatherService(IWeatherInfoRepository _weatherInfoRepository, IConfiguration _configuration, IWeatherContextFactory _contextFactory)
+        private readonly IWeatherInfoRepositoryFactory weatherInfoRepositoryFactory;
+        public WeatherService(IWeatherInfoRepository _weatherInfoRepository, IConfiguration _configuration, IWeatherInfoRepositoryFactory _weatherInfoRepositoryFactory)
         {
             weatherInfoRepository = _weatherInfoRepository;
             configuration = _configuration;
             apiKey = configuration.GetSection("ApiKey").Value;
-            contextFactory = _contextFactory;
+            weatherInfoRepositoryFactory = _weatherInfoRepositoryFactory;
         }
         public async Task<string> GetWeatherSearch(string city)
         {
@@ -65,15 +65,15 @@ namespace OpenWeather.BusinessLogic.Services
 
             foreach (var city in cities.ReadonlyCities)
             {
-                using (var dbContext = contextFactory.CreateDbContext())
-                {
+                var xxx = weatherInfoRepositoryFactory.Create();
+                
                     HttpWebRequest apiRequest = WebRequest.Create("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=metric") as HttpWebRequest;
 
                     var (rootObject, weatherInfo) = GetApiResponse.GetResponse(apiRequest);
 
-                    await dbContext.WeatherInfos.AddAsync(weatherInfo);
-                    await dbContext.SaveChangesAsync();
-                }
+                    await xxx.AddWeatherInfo(weatherInfo);
+                    //await dbContext.SaveChangesAsync();
+                
             }
         }
     }

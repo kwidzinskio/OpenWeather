@@ -4,10 +4,7 @@
 }
 
 <h1>Implement OpenWeatherMap API in ASP.NET MVC</h1>
-@using (Html.BeginForm())
-{
-    <button id="reset" name="reset">Reset »</button>
-}
+
 <div id="apiDiv">
     <h4>Select the City for Weather Report</h4>
     @using (Html.BeginForm())
@@ -19,10 +16,25 @@
 
         <button class="btn btn-primary">Szukaj</button>
     }
+
+    <a class="title-a" asp-area="" asp-controller="" asp-action="Dummy">
+        <button class="btn btn-primary">XXX</button>
+    </a>
+
+    <a class="title-a" asp-area="" asp-controller="" asp-action="Dummy">
+        <button class="btn btn-primary">XXX</button>
+    </a>
+
+    <a class="title-a" asp-area="" asp-controller="" asp-action="Dummy">
+        <button class="btn btn-primary">XXX</button>
+    </a>
+
+    <a class="title-a" asp-area="" asp-controller="" asp-action="Dummy">
+        <button class="btn btn-primary">XXX</button>
+    </a>
+
     <div id="message">@Html.Raw(Model.apiResponse)</div>
 </div>
 
-<a class="title-a" asp-area="" asp-controller="" asp-action="Add">
-    <button class="btn btn-primary">Pobierz set</button>
-</a>
+
 
