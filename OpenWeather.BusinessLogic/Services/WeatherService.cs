@@ -93,13 +93,13 @@ namespace OpenWeather.BusinessLogic.Services
         {
             var repository = weatherInfoRepositoryFactory.Create();
             var stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine("Country, City, Temperature, TemperatureFeelsLike, Descriptiom, WindSpeed, Humidity, Date");
+            stringBuilder.AppendLine("Country, City, Date, Temperature, TemperatureFeelsLike, Descriptiom, WindSpeed, Humidity, Date");
 
             foreach (var city in cities)
             {
                 var info = await repository.GetCurrentWeather(city);
 
-                stringBuilder.AppendLine($"{info.Country}, {info.Name}, {info.Temp}, {info.TempFeelsLike}, {info.Descrpition}, {info.WindSpeed}, {info.Humidity}, {info.Dt}");
+                stringBuilder.AppendLine($"{info.Country}, {info.Name}, {info.Dt}, {info.Temp}, {info.TempFeelsLike}, {info.Descrpition}, {info.WindSpeed}, {info.Humidity}");
             }
 
             var fileContent = stringBuilder.ToString();
@@ -113,7 +113,7 @@ namespace OpenWeather.BusinessLogic.Services
         {
             var repository = weatherInfoRepositoryFactory.Create();
             var stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine("Country, City, Temperature, TemperatureFeelsLike, Descriptiom, WindSpeed, Humidity, Date");
+            stringBuilder.AppendLine("Country, City, Date, Temperature, TemperatureFeelsLike, Descriptiom, WindSpeed, Humidity");
 
             foreach (var city in cities)
             {
@@ -121,7 +121,7 @@ namespace OpenWeather.BusinessLogic.Services
 
                 for (int i = 0; i < info.Count; i++)
                 {
-                    stringBuilder.AppendLine($"{info[i].Country}, {info[i].Name}, {info[i].Temp}, {info[i].TempFeelsLike}, {info[i].Descrpition}, {info[i].WindSpeed}, {info[i].Humidity}, {info[i].Dt}");
+                    stringBuilder.AppendLine($"{info[i].Country}, {info[i].Name}, {info[i].Dt}, {info[i].Temp}, {info[i].TempFeelsLike}, {info[i].Descrpition}, {info[i].WindSpeed}, {info[i].Humidity}, {info[i].Dt}");
                 }
             }
             var fileContent = stringBuilder.ToString();
