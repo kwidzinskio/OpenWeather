@@ -12,7 +12,7 @@ namespace OpenWeather.DatabaseLayer.Entities
         [Key]
         public int Id { get; set; }
         public int Visibility { get; set; }
-        public int Dt { get; set; }
+        public DateTime Dt { get; set; }
         public int IdApi { get; set; }
         public string Name { get; set; }
         public string Country { get; set; }

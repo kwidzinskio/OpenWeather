@@ -24,10 +24,13 @@ namespace OpenWeather.BusinessLogic.Helpers
 
                 ResponseWeather rootObject = JsonConvert.DeserializeObject<ResponseWeather>(apiResponse);
 
+                DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                DateTime normalDateTime = epoch.AddSeconds(rootObject.dt);
+
                 var weatherInfo = new WeatherInfo
                 {
                     Visibility = rootObject.visibility,
-                    Dt = rootObject.dt,
+                    Dt = normalDateTime,
                     IdApi = rootObject.id,
                     Name = rootObject.name,
                     Country = rootObject.sys.country,
