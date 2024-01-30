@@ -53,7 +53,8 @@ namespace OpenWeather.BusinessLogic.Services
                     Descrpition = rootObject.Descrpition,
                     WindSpeed = rootObject.WindSpeed,
                     Humidity = rootObject.Humidity,
-                    Icon = rootObject.Icon
+                    Icon = rootObject.Icon,
+                    Dt = rootObject.Dt
                 });
             }
 
@@ -79,7 +80,8 @@ namespace OpenWeather.BusinessLogic.Services
                         Descrpition = rootObject.Descrpition,
                         WindSpeed = rootObject.WindSpeed,
                         Humidity = rootObject.Humidity,
-                        Icon = rootObject.Icon
+                        Icon = rootObject.Icon,
+                        Dt = rootObject.Dt
                     });
                 }
             }
