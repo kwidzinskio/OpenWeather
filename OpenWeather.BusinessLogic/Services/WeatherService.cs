@@ -60,32 +60,31 @@ namespace OpenWeather.BusinessLogic.Services
             return weatherInfos;
         }
 
-        public async Task<string> GetHistorytWeather(List<string> cities)
+        public async Task<List<WeatherInfo>> GetHistorytWeather(List<string> cities)
         {
             var repository = weatherInfoRepositoryFactory.Create();
-            StringBuilder sb = new StringBuilder();
+            List<WeatherInfo> weatherInfos = new List<WeatherInfo>();
 
             foreach (var city in cities)
             {
-                var rootObject = await repository.GetLimitedHistoryWeather(city);
-
-                for (int i = 0; i < rootObject.Count; i++)
+                var weatherInfosDb = await repository.GetLimitedHistoryWeather(city);
+                foreach (var rootObject in weatherInfosDb)
                 {
-                    sb.Append("<tr>");
-                    sb.Append("<table><tr><th>Weather Description</th></tr>");
-                    sb.Append("<tr><td>City:</td><td>" + rootObject[i].Name + "</td></tr>");
-                    sb.Append("<tr><td>Country:</td><td>" + rootObject[i].Country + "</td></tr>");
-                    sb.Append("<tr><td>Current Temperature:</td><td>" + rootObject[i].Temp + " °C</td></tr>");
-                    sb.Append("<tr><td>Feelslike Temperature:</td><td>" + rootObject[i].TempFeelsLike + " °C</td></tr>");
-                    sb.Append("<tr><td>Weather:</td><td>" + rootObject[i].Descrpition + "</td></tr>");
-                    sb.Append("<tr><td>Wind:</td><td>" + rootObject[i].WindSpeed + " Km/h</td></tr>");
-                    sb.Append("<tr><td>Humidity:</td><td>" + rootObject[i].Humidity + "</td></tr>");
-                    sb.Append("<tr><td>Icon:</td><td>" + rootObject[i].Icon + "</td></tr>");
-                    sb.Append("</tr></table>");
+                    weatherInfos.Add(new WeatherInfo
+                    {
+                        Name = rootObject.Name,
+                        Country = rootObject.Country,
+                        Temp = rootObject.Temp,
+                        TempFeelsLike = rootObject.TempFeelsLike,
+                        Descrpition = rootObject.Descrpition,
+                        WindSpeed = rootObject.WindSpeed,
+                        Humidity = rootObject.Humidity,
+                        Icon = rootObject.Icon
+                    });
                 }
             }
 
-            return sb.ToString();
+            return weatherInfos;
         }
 
         public async Task<MemoryStream> ReportCurrentWeather(List<string> cities)

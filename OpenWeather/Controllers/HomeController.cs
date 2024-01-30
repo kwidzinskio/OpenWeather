@@ -42,8 +42,8 @@ namespace OpenWeather.Controllers
                         openWeatherMap.weatherInfos = weatherInfos;
                         break;
                     case "showHistory":
-                        /*weatherInfo = await weatherService.GetHistorytWeather(cities);
-                        openWeatherMap.response = weatherInfo;*/
+                        weatherInfos = await weatherService.GetHistorytWeather(cities);
+                        openWeatherMap.weatherInfos = weatherInfos;
                         break;
                     case "downloadLast":
                         var streamCurrent = await weatherService.ReportCurrentWeather(cities);
