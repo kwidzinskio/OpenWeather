@@ -93,3 +93,7 @@ body {
 .btn-primary:hover {
     background-color: green;
 }
+
+.message {
+    margin-top: 1rem;
+}

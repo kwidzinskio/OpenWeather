@@ -30,7 +30,7 @@
         <button type="submit" name="action" value="downloadLast" class="btn btn-primary">Download Last</button>
         <button type="submit" name="action" value="downloadHistory" class="btn btn-primary">Download All</button>
     }
-    <div id="message">
+    <div class="message">
         @if (Model.weatherInfos != null && Model.weatherInfos.Any())
         {
             <table class="table table-striped">
@@ -38,8 +38,8 @@
                     <tr>
                         <th>City</th>
                         <th>Country</th>
-                        <th>Current Temperature</th>
-                        <th>Feels Like</th>
+                        <th>Current Temp</th>
+                        <th>Feels Like Temp</th>
                         <th>Weather</th>
                         <th>Wind</th>
                         <th>Humidity</th>
@@ -52,7 +52,7 @@
                         <tr>
                             <td>@info.Name</td>
                             <td>@info.Country</td>
-                            <td>@info.Temp °C</td>
+                            <td>@info.Temp</td>
                             <td>@info.TempFeelsLike °C</td>
                             <td>@info.Descrpition</td>
                             <td>@info.WindSpeed Km/h</td>
