@@ -10,15 +10,17 @@ namespace OpenWeather.BusinessLogic.Helpers
     public class GetApiResponse
     {
         private readonly HttpClient httpClient;
-        public GetApiResponse(HttpClient _httpClient)
+
+        public GetApiResponse(HttpClient httpClient)
         {
-            httpClient = _httpClient;
+            this.httpClient = httpClient;
         }
-        public async static Task<Tuple<ResponseWeather, WeatherInfo>> GetResponseAsync(HttpClient httpClient, string url)
+
+        public async Task<Tuple<ResponseWeather, WeatherInfo>> GetResponseAsync(string url)
         {
             try
             {
-                var response = await httpClient.GetAsync(url);
+                var response = await this.httpClient.GetAsync(url);
                 response.EnsureSuccessStatusCode();
                 var apiResponse = await response.Content.ReadAsStringAsync();
 
