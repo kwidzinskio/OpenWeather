@@ -34,16 +34,16 @@ namespace OpenWeather.Controllers
             if (!string.IsNullOrEmpty(selectedCities))
             {
                 List<string> cities = selectedCities.Split(',').ToList();
-                string weatherInfo;
+                List<WeatherInfo> weatherInfos;
                 switch (action)
                 {
                     case "showLast":
-                        weatherInfo = await weatherService.GetCurrentWeather(cities);
-                        openWeatherMap.response = weatherInfo;
+                        weatherInfos = await weatherService.GetCurrentWeather(cities);
+                        openWeatherMap.weatherInfos = weatherInfos;
                         break;
                     case "showHistory":
-                        weatherInfo = await weatherService.GetHistorytWeather(cities);
-                        openWeatherMap.response = weatherInfo;
+                        /*weatherInfo = await weatherService.GetHistorytWeather(cities);
+                        openWeatherMap.response = weatherInfo;*/
                         break;
                     case "downloadLast":
                         var streamCurrent = await weatherService.ReportCurrentWeather(cities);

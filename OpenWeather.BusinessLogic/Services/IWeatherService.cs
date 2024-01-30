@@ -9,7 +9,7 @@ namespace OpenWeather.BusinessLogic.Services
 {
     public interface IWeatherService
     {
-        Task<string> GetCurrentWeather(List<string> cities);
+        Task<List<WeatherInfo>> GetCurrentWeather(List<string> cities);
         Task<string> GetHistorytWeather(List<string> cities);
         Task<MemoryStream> ReportCurrentWeather(List<string> cities);
         Task<MemoryStream> ReportHistoryWeather(List<string> cities);

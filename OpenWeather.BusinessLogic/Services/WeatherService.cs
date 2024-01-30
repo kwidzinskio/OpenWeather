@@ -36,29 +36,28 @@ namespace OpenWeather.BusinessLogic.Services
             weatherInfoRepositoryFactory = _weatherInfoRepositoryFactory;
             httpClient = _httpClient;
         }
-        public async Task<string> GetCurrentWeather(List<string> cities)
+        public async Task<List<WeatherInfo>> GetCurrentWeather(List<string> cities)
         {
             var repository = weatherInfoRepositoryFactory.Create();
-            StringBuilder sb = new StringBuilder();
+            List<WeatherInfo> weatherInfos = new List<WeatherInfo>();
 
             foreach (var city in cities)
             {
                 var rootObject = await repository.GetCurrentWeather(city);
-
-                sb.Append("<tr>");
-                sb.Append("<table><tr><th>Weather Description</th></tr>");
-                sb.Append("<tr><td>City:</td><td>" + rootObject.Name + "</td></tr>");
-                sb.Append("<tr><td>Country:</td><td>" + rootObject.Country + "</td></tr>");
-                sb.Append("<tr><td>Current Temperature:</td><td>" + rootObject.Temp + " °C</td></tr>");
-                sb.Append("<tr><td>Feelslike Temperature:</td><td>" + rootObject.TempFeelsLike + " °C</td></tr>");
-                sb.Append("<tr><td>Weather:</td><td>" + rootObject.Descrpition + "</td></tr>");
-                sb.Append("<tr><td>Wind:</td><td>" + rootObject.WindSpeed + " Km/h</td></tr>");
-                sb.Append("<tr><td>Humidity:</td><td>" + rootObject.Humidity + "</td></tr>");
-                sb.Append("<tr><td>Icon:</td><td>" + rootObject.Icon + "</td></tr>");
-                sb.Append("</tr></table>");
+                weatherInfos.Add(new WeatherInfo
+                {
+                    Name = rootObject.Name,
+                    Country = rootObject.Country,
+                    Temp = rootObject.Temp,
+                    TempFeelsLike = rootObject.TempFeelsLike,
+                    Descrpition = rootObject.Descrpition,
+                    WindSpeed = rootObject.WindSpeed,
+                    Humidity = rootObject.Humidity,
+                    Icon = rootObject.Icon
+                });
             }
 
-            return sb.ToString();
+            return weatherInfos;
         }
 
         public async Task<string> GetHistorytWeather(List<string> cities)

@@ -25,7 +25,7 @@ namespace OpenWeather.DatabaseLayer.Migrations
                 defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
-                name: "Descrpition",
+                name: "Description",
                 table: "WeatherInfos",
                 type: "nvarchar(max)",
                 nullable: false,
