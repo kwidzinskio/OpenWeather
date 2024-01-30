@@ -20,7 +20,7 @@ namespace OpenWeather.BusinessLogic.Services
     {
         private readonly IConfiguration configuration;
         private readonly string apiKey;
-        private readonly Cities cities = new Cities();
+        private readonly Cities cities = new();
         private readonly IWeatherInfoRepository weatherInfoRepository;
         private readonly IWeatherInfoRepositoryFactory weatherInfoRepositoryFactory;
         private readonly HttpClient httpClient;

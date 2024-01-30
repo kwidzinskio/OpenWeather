@@ -15,7 +15,7 @@ namespace OpenWeather.Controllers
 {
     public class HomeController : Controller
     {
-        private OpenWeatherApp openWeatherMap = new OpenWeatherApp();
+        private readonly OpenWeatherApp openWeatherMap = new OpenWeatherApp();
         private readonly IWeatherService weatherService;
 
         public HomeController(IWeatherService weatherService)
@@ -59,12 +59,6 @@ namespace OpenWeather.Controllers
             }
 
             return View(openWeatherMap);
-        }
-
-        [HttpGet]
-        public async Task<ActionResult> Dummy()
-        {
-            return View("Index");
         }
     }
 }
