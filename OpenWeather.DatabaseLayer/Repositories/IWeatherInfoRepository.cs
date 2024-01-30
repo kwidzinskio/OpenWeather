@@ -11,6 +11,7 @@ namespace OpenWeather.DatabaseLayer.Repositories
     {
         Task AddWeatherInfo(WeatherInfo weatherInfo);
         Task<WeatherInfo> GetCurrentWeather(string city);
+        Task<List<WeatherInfo>> GetLimitedHistoryWeather(string city);
         Task<List<WeatherInfo>> GetHistoryWeather(string city);
     }
 }

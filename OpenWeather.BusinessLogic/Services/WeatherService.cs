@@ -68,7 +68,7 @@ namespace OpenWeather.BusinessLogic.Services
 
             foreach (var city in cities)
             {
-                var rootObject = await repository.GetHistoryWeather(city);
+                var rootObject = await repository.GetLimitedHistoryWeather(city);
 
                 for (int i = 0; i < rootObject.Count; i++)
                 {
@@ -89,7 +89,7 @@ namespace OpenWeather.BusinessLogic.Services
             return sb.ToString();
         }
 
-        public async Task<string> ConvertCurrentWeatherToCsv(List<string> cities)
+        public async Task<MemoryStream> ReportCurrentWeather(List<string> cities)
         {
             var repository = weatherInfoRepositoryFactory.Create();
             var stringBuilder = new StringBuilder();
@@ -101,12 +101,15 @@ namespace OpenWeather.BusinessLogic.Services
 
                 stringBuilder.AppendLine($"{info.Country}, {info.Name}, {info.Temp}, {info.TempFeelsLike}, {info.Descrpition}, {info.WindSpeed}, {info.Humidity}, {info.Dt}");
             }
-            var fileContent = stringBuilder.ToString();
 
-            return fileContent;
+            var fileContent = stringBuilder.ToString();
+            var byteArray = Encoding.ASCII.GetBytes(fileContent);
+            var stream = new MemoryStream(byteArray);
+
+            return stream;
         }
 
-        public async Task<string> ConvertHistoryWeatherToCsv(List<string> cities)
+        public async Task<MemoryStream> ReportHistoryWeather(List<string> cities)
         {
             var repository = weatherInfoRepositoryFactory.Create();
             var stringBuilder = new StringBuilder();
@@ -122,12 +125,13 @@ namespace OpenWeather.BusinessLogic.Services
                 }
             }
             var fileContent = stringBuilder.ToString();
+            var byteArray = Encoding.ASCII.GetBytes(fileContent);
+            var stream = new MemoryStream(byteArray);
 
-            return fileContent;
+            return stream;
         }
 
-
-        public async Task GetWeatherSet()
+        public async Task FetchApiWeatherSet()
         {
             var repository = weatherInfoRepositoryFactory.Create();
 

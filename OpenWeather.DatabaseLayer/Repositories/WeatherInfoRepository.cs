@@ -27,23 +27,54 @@ namespace OpenWeather.DatabaseLayer.Repositories
 
         public async Task<WeatherInfo> GetCurrentWeather(string city)
         {
-            var weatherInfo = await context.WeatherInfos
-                                           .Where(e => e.Name.Equals(city))
-                                           .OrderByDescending(e => e.Dt)
-                                           .FirstOrDefaultAsync();
+            try
+            {
+                var weatherInfo = await context.WeatherInfos
+                               .Where(e => e.Name.Equals(city))
+                               .OrderByDescending(e => e.Dt)
+                               .FirstOrDefaultAsync();
 
-            return weatherInfo;
+                return weatherInfo;
+            }
+
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+        }
+
+        public async Task<List<WeatherInfo>> GetLimitedHistoryWeather(string city)
+        {
+            try
+            {
+                string sqlQuery = "SELECT TOP 5 * FROM WeatherInfos WHERE Name = @city ORDER BY NEWID()";
+
+                var weatherInfos = await context.WeatherInfos
+                                                .FromSqlRaw(sqlQuery, new SqlParameter("@city", city))
+                                                .ToListAsync();
+
+                return weatherInfos;
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<List<WeatherInfo>> GetHistoryWeather(string city)
         {
-            string sqlQuery = "SELECT TOP 5 * FROM WeatherInfos WHERE Name = @city ORDER BY NEWID()";
-
-            var weatherInfos = await context.WeatherInfos
-                                            .FromSqlRaw(sqlQuery, new SqlParameter("@city", city))
-                                            .ToListAsync();
-
-            return weatherInfos;
+            try
+            {
+                var weatherInfos = await context.WeatherInfos
+                               .Where(e => e.Name.Equals(city))
+                               .ToListAsync();
+                return weatherInfos;
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

@@ -46,19 +46,11 @@ namespace OpenWeather.Controllers
                         openWeatherMap.response = weatherInfo;
                         break;
                     case "downloadLast":
-                        var csv = await weatherService.ConvertCurrentWeatherToCsv(cities);
-
-                        var byteArray = Encoding.ASCII.GetBytes(csv);
-                        var stream = new MemoryStream(byteArray);
-
-                        return File(stream, "text/csv", "weatherData.csv");
+                        var streamCurrent = await weatherService.ReportCurrentWeather(cities);
+                        return File(streamCurrent, "text/csv", "weatherData.csv");
                      case "downloadHistory":
-                        var csv2 = await weatherService.ConvertHistoryWeatherToCsv(cities);
-
-                        var byteArray2 = Encoding.ASCII.GetBytes(csv2);
-                        var stream2 = new MemoryStream(byteArray2);
-
-                        return File(stream2, "text/csv", "weatherData.csv");
+                        var streamHistory = await weatherService.ReportHistoryWeather(cities);
+                        return File(streamHistory, "text/csv", "weatherData.csv");
                 }
             }
             else

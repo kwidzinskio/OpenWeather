@@ -22,7 +22,7 @@ public class WeatherBackgroundService : BackgroundService
             using (var scope = scopeFactory.CreateScope())
             {
                 var weatherService = scope.ServiceProvider.GetRequiredService<IWeatherService>();
-                await weatherService.GetWeatherSet();
+                await weatherService.FetchApiWeatherSet();
             }
             Console.WriteLine("...");
             await Task.Delay(timeInterval, stoppingToken);
