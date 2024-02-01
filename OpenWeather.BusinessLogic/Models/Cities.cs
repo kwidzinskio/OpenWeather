@@ -23,8 +23,8 @@ namespace OpenWeather.BusinessLogic.Models
         {
             cities = new List<City>
             {
-                new City ("London", 114460 ), 
-                new City ("Paris", 16430 ), 
+                new City ("London", 114460 ),
+                new City ("Paris", 16634 ),
                 new City("Tokyo", 81753),
                 new City("Beijing", 108674)
             };

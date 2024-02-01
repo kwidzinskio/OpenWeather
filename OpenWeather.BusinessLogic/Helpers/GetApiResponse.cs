@@ -21,34 +21,33 @@ namespace OpenWeather.BusinessLogic.Helpers
         {
             try
             {
-                var responseOpenWeatherApp = await httpClient.GetAsync(urlOpenWeatherMap);
-                responseOpenWeatherApp.EnsureSuccessStatusCode();
-                var apiResponseOpenWeatherApp = await responseOpenWeatherApp.Content.ReadAsStringAsync();
+                var responseOpenWeatherMap = await httpClient.GetAsync(urlOpenWeatherMap);
+                responseOpenWeatherMap.EnsureSuccessStatusCode();
+                var apiResponseOpenWeatherMap = await responseOpenWeatherMap.Content.ReadAsStringAsync();
+                ResponseWeather rootObjectOpenWeatherMap = JsonConvert.DeserializeObject<ResponseWeather>(apiResponseOpenWeatherMap);
+                DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                DateTime normalDateTime = epoch.AddSeconds(rootObjectOpenWeatherMap.Dt);
 
                 httpClient.DefaultRequestHeaders.Add("apikey", apiKeyAirly);
-                HttpResponseMessage responseAirly = await httpClient.GetAsync(urlAirly);
+                var responseAirly = await httpClient.GetAsync(urlAirly);
                 responseAirly.EnsureSuccessStatusCode(); 
                 string apiResponseAirly = await responseAirly.Content.ReadAsStringAsync();
-
-                ResponseWeather rootObject = new();
-                //ResponseWeather rootObject = JsonConvert.DeserializeObject<ResponseWeather>(apiResponse);
-
-                DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-                DateTime normalDateTime = epoch.AddSeconds(rootObject.Dt);
+                httpClient.DefaultRequestHeaders.Remove("apikey");
+                ResponsePollution rootObjectAirly = JsonConvert.DeserializeObject<ResponsePollution>(apiResponseAirly);
 
                 var weatherInfo = new WeatherInfo
                 {
-                    Name = rootObject.Name,
-                    Country = rootObject.Sys.Country,
+                    Name = rootObjectOpenWeatherMap.Name,
+                    Country = rootObjectOpenWeatherMap.Sys.Country,
                     Dt = normalDateTime,
-                    Temp = rootObject.Main.Temp,
-                    TempFeelsLike = rootObject.Main.TempFeelsLike,
-                    Descrpition = rootObject.Weather[0].Description,
-                    WindSpeed = rootObject.Wind.Speed,
-                    Humidity = rootObject.Main.Humidity,
-                    Pressure = rootObject.Main.Pressure,
-                    Visibility = rootObject.Visibility,
-                    Icon = rootObject.Weather[0].Icon
+                    Temp = rootObjectOpenWeatherMap.Main.Temp,
+                    TempFeelsLike = rootObjectOpenWeatherMap.Main.TempFeelsLike,
+                    Descrpition = rootObjectOpenWeatherMap.Weather[0].Description,
+                    WindSpeed = rootObjectOpenWeatherMap.Wind.Speed,
+                    Humidity = rootObjectOpenWeatherMap.Main.Humidity,
+                    Pressure = rootObjectOpenWeatherMap.Main.Pressure,
+                    Visibility = rootObjectOpenWeatherMap.Visibility,
+                    Icon = rootObjectOpenWeatherMap.Weather[0].Icon
                 };
 
                 return weatherInfo;

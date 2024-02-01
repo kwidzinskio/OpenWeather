@@ -34,7 +34,7 @@ namespace OpenWeather.BusinessLogic.Services
             _weatherInfoRepository = weatherInfoRepository;
             _configuration = configuration;
             _apiKeyOpenWeatherApp = _configuration.GetSection("ApiKeyOpenWeatherApp").Value;
-            _apiKeyAirly = _configuration.GetSection("ApiKeyOpenAirly").Value;
+            _apiKeyAirly = _configuration.GetSection("ApiKeyAirly").Value;
             _weatherInfoRepositoryFactory = weatherInfoRepositoryFactory;
             _httpClient = httpClient;
         }

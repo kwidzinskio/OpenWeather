@@ -2,10 +2,6 @@
 
 namespace OpenWeather.BusinessLogic.Models
 {
-    public class OpenWeatherMapApi
-    {
-    }
-
     public class Weather
     {
         public string Description { get; set; }
