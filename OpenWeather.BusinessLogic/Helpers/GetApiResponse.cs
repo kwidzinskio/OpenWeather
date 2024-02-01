@@ -18,11 +18,18 @@ namespace OpenWeather.BusinessLogic.Helpers
         {
             try
             {
-                var response = await httpClient.GetAsync(url);
+/*                var response = await httpClient.GetAsync(url);
                 response.EnsureSuccessStatusCode();
-                var apiResponse = await response.Content.ReadAsStringAsync();
+                var apiResponse = await response.Content.ReadAsStringAsync();*/
 
-                ResponseWeather rootObject = JsonConvert.DeserializeObject<ResponseWeather>(apiResponse);
+                httpClient.DefaultRequestHeaders.Add("apikey", "9ZjILXHLzBIHpBex0FTk7uMVrT7JOgNH");
+                string urlAirly = "https://airapi.airly.eu/v2/measurements/installation?installationId=114460";
+                HttpResponseMessage responseAirly = await httpClient.GetAsync(urlAirly);
+                responseAirly.EnsureSuccessStatusCode(); 
+                string apiResponseAirly = await responseAirly.Content.ReadAsStringAsync();
+
+                ResponseWeather rootObject = new();
+                //ResponseWeather rootObject = JsonConvert.DeserializeObject<ResponseWeather>(apiResponse);
 
                 DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                 DateTime normalDateTime = epoch.AddSeconds(rootObject.Dt);
