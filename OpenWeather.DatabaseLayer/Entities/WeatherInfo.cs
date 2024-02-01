@@ -18,6 +18,10 @@ namespace OpenWeather.DatabaseLayer.Entities
         public double TempFeelsLike { get; set; }
         public string Descrpition { get; set; }
         public double WindSpeed { get; set; }
+        public double PM25 { get; set; }
+        public string PollutionLevel { get; set; }
+        public string PollutionDescription { get; set; }
+        public string PollutionDescriptionColor { get; set; }
         public int Humidity { get; set; }
         public int Pressure { get; set; }
         public int Visibility { get; set; }

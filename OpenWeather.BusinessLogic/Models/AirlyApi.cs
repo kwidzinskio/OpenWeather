@@ -15,14 +15,13 @@ namespace OpenWeather.BusinessLogic.Models
 
     public class PollutionData
     {
-        public DateTime FromDateTime { get; set; }
-        public DateTime TillDateTime { get; set; }
         public List<Value> Values { get; set; }
         public List<Index> Indexes { get; set; }
     }
 
     public class Index
     {
+        public string Level { get; set; }
         public string Description { get; set; }
         public string Color { get; set; }
     }
