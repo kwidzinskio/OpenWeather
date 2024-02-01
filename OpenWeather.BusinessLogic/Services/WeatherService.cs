@@ -159,8 +159,11 @@ namespace OpenWeather.BusinessLogic.Services
 
             foreach (var city in _cities.Read())
             {
-                string url = $"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={_apiKey}&units=metric";
-                var weatherInfo = await GetApiResponse.GetResponseAsync(_httpClient, url);
+                string urlOpenWeatherMap = $"https://api.openweathermap.org/data/2.5/weather?q={city.Name}&appid={_apiKey}&units=metric";
+                int? airlyId = _cities.FindAirlyIdByName(city.Name);
+                string urlAirly = $"https://airapi.airly.eu/v2/measurements/installation?installationId={airlyId.Value}";
+
+                var weatherInfo = await GetApiResponse.GetResponseAsync(_httpClient, urlOpenWeatherMap, urlAirly);
 
                 await repository.AddWeatherInfo(weatherInfo);
             }

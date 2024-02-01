@@ -14,16 +14,15 @@ namespace OpenWeather.BusinessLogic.Helpers
         {
             this.httpClient = httpClient;
         }
-        public async static Task<WeatherInfo> GetResponseAsync(HttpClient httpClient, string url)
+        public async static Task<WeatherInfo> GetResponseAsync(HttpClient httpClient, string urlOpenWeatherMap, string urlAirly)
         {
             try
             {
-/*                var response = await httpClient.GetAsync(url);
-                response.EnsureSuccessStatusCode();
-                var apiResponse = await response.Content.ReadAsStringAsync();*/
+                /*                var response = await httpClient.GetAsync(urlOpenWeatherMap);
+                                response.EnsureSuccessStatusCode();
+                                var apiResponse = await response.Content.ReadAsStringAsync();*/
 
                 httpClient.DefaultRequestHeaders.Add("apikey", "9ZjILXHLzBIHpBex0FTk7uMVrT7JOgNH");
-                string urlAirly = "https://airapi.airly.eu/v2/measurements/installation?installationId=114460";
                 HttpResponseMessage responseAirly = await httpClient.GetAsync(urlAirly);
                 responseAirly.EnsureSuccessStatusCode(); 
                 string apiResponseAirly = await responseAirly.Content.ReadAsStringAsync();

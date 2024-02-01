@@ -1,23 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenWeather.BusinessLogic.Models
 {
+    public class City
+    {
+        public string Name { get; }
+        public int AirlyId { get; }
+
+        public City(string name, int airlyId)
+        {
+            Name = name;
+            AirlyId = airlyId;
+        }
+    }
+
     public class Cities
     {
-        private readonly IEnumerable<string> cities;
+        private readonly List<City> cities;
 
         public Cities()
         {
-            cities = new List<string> { "London", "Paris", "Tokyo", "Washington"}.AsReadOnly();
+            cities = new List<City>
+            {
+                new City ("London", 114460 ), 
+                new City ("Paris", 16430 ), 
+                new City("Tokyo", 81753),
+                new City("Beijing", 108674)
+            };
         }
 
-        public IEnumerable<string> Read()
+        public List<City> Read()
         {
             return cities;
+        }
+
+        public int? FindAirlyIdByName(string cityName)
+        {
+            var city = cities.Find(c => c.Name.Equals(cityName, StringComparison.OrdinalIgnoreCase));
+            return city?.AirlyId;
         }
     }
 }
