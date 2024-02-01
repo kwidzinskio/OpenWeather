@@ -9,16 +9,16 @@
     {
         <div class="form-group">
             <div class="form-item">
-                <input type="checkbox" name="cities" value="Paris" id="Paris" />
-                <label for="Paris">Paris</label>
-            </div>
-            <div class="form-item">
                 <input type="checkbox" name="cities" value="London" id="London" />
                 <label for="London">London</label>
             </div>
             <div class="form-item">
-                <input type="checkbox" name="cities" value="Tokyo" id="Tokyo">
-                <label for="Tokyo">Tokyo</label>
+                <input type="checkbox" name="cities" value="Paris" id="Paris" />
+                <label for="Paris">Paris</label>
+            </div>
+            <div class="form-item">
+                <input type="checkbox" name="cities" value="Beijing" id="Beijing">
+                <label for="Beijing">Beijing</label>
             </div>
             <div class="form-item">
                 <input type="checkbox" name="cities" value="Washington" id="Washington" />
@@ -30,50 +30,56 @@
         <button type="submit" name="action" value="downloadLast" class="btn btn-primary">Download Last</button>
         <button type="submit" name="action" value="downloadHistory" class="btn btn-primary">Download All</button>
     }
-    <div class="message">
-        @if (Model.WeatherInfos != null && Model.WeatherInfos.Any())
-        {
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>City</th>
-                        <th>Country</th>
-                        <th>Date</th>
-                        <th>Current Temp</th>
-                        <th>Feels Like</th>
-                        <th>Description</th>
-                        <th>Wind Speed</th>
-                        <th>Humidity</th>
-                        <th>Pressure</th>
-                        <th>Visibility</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var info in Model.WeatherInfos)
-                    {
-                        <tr>
-                            <td>@info.Name</td>
-                            <td>@info.Country</td>
-                            <td>@info.Dt</td>
-                            <td>@info.Temp °C</td>
-                            <td>@info.TempFeelsLike °C</td>
-                            <td>@info.Descrpition</td>
-                            <td>@info.WindSpeed km/h</td>
-                            <td>@info.Humidity %</td>
-                            <td>@info.Pressure hPa</td>
-                            <td>@info.Visibility m</td>
-                            <td><img class="size-image" src="@($"http://openweathermap.org/img/wn/{info.Icon}.png")" alt="NULL"></td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        else
-        {
-            <p>@Html.Raw(Model.Response)</p>
-        }
-    </div>
 </div>
+@if (Model.WeatherInfos != null && Model.WeatherInfos.Any())
+{
+    <table class="table message">
+        <thead>
+        <tr>
+            <th>City</th>
+            <th>Country</th>
+            <th>Date</th>
+            <th>Current Temp</th>
+            <th>Feels Like</th>
+            <th>Description</th>
+            <th>Wind Speed</th>
+            <th>PM25</th>
+            <th>Pollution Level</th>
+            <th>Pollution Description</th>
+            <th>Humidity</th>
+            <th>Pressure</th>
+            <th>Visibility</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var info in Model.WeatherInfos)
+            {
+                <tr>
+                    <td>@info.Name</td>
+                    <td>@info.Country</td>
+                    <td>@info.Dt</td>
+                    <td>@info.Temp °C</td>
+                    <td>@info.TempFeelsLike °C</td>
+                    <td>@info.Descrpition</td>
+                    <td>@info.WindSpeed km/h</td>
+                    <td>@info.PM25 μ/m3</td>
+                    <td>@info.PollutionLevel</td>
+                    <td style="color:@info.PollutionDescriptionColor">@info.PollutionDescription</td>
+                    <td>@info.Humidity %</td>
+                    <td>@info.Pressure hPa</td>
+                    <td>@info.Visibility m</td>
+                    <td><img class="size-image" src="@($"http://openweathermap.org/img/wn/{info.Icon}.png")" alt="NULL"></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="container message">
+        <p>@Html.Raw(Model.Response)</p>
+    </div>
+}
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {

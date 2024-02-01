@@ -19,8 +19,19 @@ html {
   min-height: 100%;
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
 body {
-  margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+}
+
+.content {
+    flex: 1;
 }
 
 /*--------------------------------------------------------------
@@ -94,6 +105,11 @@ body {
     background-color: green;
 }
 
+.table, .footer{
+    margin: 0 1rem 1rem 1rem;
+    width: auto;
+}
+
 .message {
     margin-top: 1rem;
 }
@@ -101,11 +117,4 @@ body {
 .size-image {
     width: 3rem;
     height: 3rem;
-}
-
-/*--------------------------------------------------------------
-# Footer
---------------------------------------------------------------*/
-.footer {
-    padding-left: 0.2rem;
 }

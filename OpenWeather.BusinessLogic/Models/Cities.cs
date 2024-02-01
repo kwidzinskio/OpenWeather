@@ -25,8 +25,8 @@ namespace OpenWeather.BusinessLogic.Models
             {
                 new City ("London", 114460 ),
                 new City ("Paris", 16634 ),
-                new City("Tokyo", 81753),
-                new City("Beijing", 108674)
+                new City("Beijing", 81753),
+                new City("Washington", 108674)
             };
         }
 

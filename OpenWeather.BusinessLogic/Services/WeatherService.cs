@@ -54,6 +54,10 @@ namespace OpenWeather.BusinessLogic.Services
                     TempFeelsLike = rootObject.TempFeelsLike,
                     Descrpition = rootObject.Descrpition,
                     WindSpeed = rootObject.WindSpeed,
+                    PM25 = rootObject.PM25,
+                    PollutionLevel = rootObject.PollutionLevel,
+                    PollutionDescription = rootObject.PollutionDescription,
+                    PollutionDescriptionColor = rootObject.PollutionDescriptionColor,
                     Humidity = rootObject.Humidity,
                     Pressure = rootObject.Pressure,
                     Visibility = rootObject.Visibility,
@@ -83,6 +87,10 @@ namespace OpenWeather.BusinessLogic.Services
                         TempFeelsLike = rootObject.TempFeelsLike,
                         Descrpition = rootObject.Descrpition,
                         WindSpeed = rootObject.WindSpeed,
+                        PM25 = rootObject.PM25,
+                        PollutionLevel = rootObject.PollutionLevel,
+                        PollutionDescription = rootObject.PollutionDescription,
+                        PollutionDescriptionColor = rootObject.PollutionDescriptionColor,
                         Humidity = rootObject.Humidity,
                         Pressure = rootObject.Pressure,
                         Visibility = rootObject.Visibility,
@@ -99,7 +107,7 @@ namespace OpenWeather.BusinessLogic.Services
         {
             var repository = _weatherInfoRepositoryFactory.Create();
             var stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine("Country, City, Date, Temp, TempFeelsLike, Descriptiom, WindSpeed, Humidity, Pressure, Visibility"); ;
+            stringBuilder.AppendLine("Country, City, Date, Temp, TempFeelsLike, Descriptiom, WindSpeed, PM25, PollutionLevel, PollutionDescription, Humidity, Pressure, Visibility"); ;
 
             foreach (var city in cities)
             {
@@ -112,6 +120,9 @@ namespace OpenWeather.BusinessLogic.Services
                     $"{info.TempFeelsLike}, " +
                     $"{info.Descrpition}, " +
                     $"{info.WindSpeed}, " +
+                    $"{info.PM25}, " +
+                    $"{info.PollutionLevel}, " +
+                    $"{info.PollutionDescription}, " +
                     $"{info.Humidity}, " +
                     $"{info.Pressure}, " +
                     $"{info.Visibility}");
@@ -128,7 +139,7 @@ namespace OpenWeather.BusinessLogic.Services
         {
             var repository = _weatherInfoRepositoryFactory.Create();
             var stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine("Country, City, Date, Temp, TempFeelsLike, Descriptiom, WindSpeed, Humidity, Pressure, Visibility");
+            stringBuilder.AppendLine("Country, City, Date, Temp, TempFeelsLike, Descriptiom, WindSpeed, PM25, PollutionLevel, PollutionDescription, Humidity, Pressure, Visibility");
 
             foreach (var city in cities)
             {
@@ -143,6 +154,9 @@ namespace OpenWeather.BusinessLogic.Services
                         $"{info[i].TempFeelsLike}, " +
                         $"{info[i].Descrpition}, " +
                         $"{info[i].WindSpeed}, " +
+                        $"{info[i].PM25}, " +
+                        $"{info[i].PollutionLevel}, " +
+                        $"{info[i].PollutionDescription}, " +
                         $"{info[i].Humidity}, " +
                         $"{info[i].Pressure}, " +
                         $"{info[i].Visibility}");
