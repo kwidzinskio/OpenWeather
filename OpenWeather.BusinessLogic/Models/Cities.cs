@@ -12,7 +12,7 @@ namespace OpenWeather.BusinessLogic.Models
 
         public Cities()
         {
-            cities = new List<string> { "London", "Paris", "Tokyo", "Washington" }.AsReadOnly();
+            cities = new List<string> { "London", "Paris", "Tokyo", "Washington"}.AsReadOnly();
         }
 
         public IEnumerable<string> Read()

@@ -7,25 +7,24 @@ using System.Threading.Tasks;
 
 public class WeatherBackgroundService : BackgroundService
 {
-    private readonly IServiceScopeFactory scopeFactory;
-    private readonly int timeInterval = 10000; 
+    private readonly IServiceScopeFactory _scopeFactory;
+    private readonly int _timeInterval = 600000; 
 
     public WeatherBackgroundService(IServiceScopeFactory scopeFactory)
     {
-        this.scopeFactory = scopeFactory;
+        _scopeFactory = scopeFactory;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            using (var scope = scopeFactory.CreateScope())
+            using (var scope = _scopeFactory.CreateScope())
             {
                 var weatherService = scope.ServiceProvider.GetRequiredService<IWeatherService>();
                 await weatherService.FetchApiWeatherSet();
             }
-            Console.WriteLine("...");
-            await Task.Delay(timeInterval, stoppingToken);
+            await Task.Delay(_timeInterval, stoppingToken);
         }
     }
 }

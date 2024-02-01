@@ -48,12 +48,12 @@ namespace OpenWeather.DatabaseLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdApi")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Pressure")
+                        .HasColumnType("int");
 
                     b.Property<double>("Temp")
                         .HasColumnType("float");

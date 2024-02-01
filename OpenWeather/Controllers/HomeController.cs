@@ -39,11 +39,11 @@ namespace OpenWeather.Controllers
                 {
                     case "showLast":
                         weatherInfos = await weatherService.GetCurrentWeather(cities);
-                        openWeatherMap.weatherInfos = weatherInfos;
+                        openWeatherMap.WeatherInfos = weatherInfos;
                         break;
                     case "showHistory":
                         weatherInfos = await weatherService.GetHistorytWeather(cities);
-                        openWeatherMap.weatherInfos = weatherInfos;
+                        openWeatherMap.WeatherInfos = weatherInfos;
                         break;
                     case "downloadLast":
                         var streamCurrent = await weatherService.ReportCurrentWeather(cities);
@@ -55,7 +55,7 @@ namespace OpenWeather.Controllers
             }
             else
             {
-                 openWeatherMap.response = "Choose city first";
+                 openWeatherMap.Response = "Choose city first";
             }
 
             return View(openWeatherMap);

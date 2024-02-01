@@ -12,7 +12,7 @@ using OpenWeather.DatabaseLayer.Context;
 namespace OpenWeather.DatabaseLayer.Migrations
 {
     [DbContext(typeof(WeatherContext))]
-    [Migration("20240130182818_InitialCreate")]
+    [Migration("20240130201319_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -51,12 +51,12 @@ namespace OpenWeather.DatabaseLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdApi")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Pressure")
+                        .HasColumnType("int");
 
                     b.Property<double>("Temp")
                         .HasColumnType("float");

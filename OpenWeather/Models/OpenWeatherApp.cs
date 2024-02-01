@@ -4,13 +4,7 @@ namespace OpenWeather.Models
 {
     public class OpenWeatherApp
     {
-        public string response { get; set; }
-
-        public List<WeatherInfo> weatherInfos { get; set; }
-
-        public string city
-        {
-            get; set;
-        }
+        public string Response { get; set; }
+        public List<WeatherInfo> WeatherInfos { get; set; }
     }
 }

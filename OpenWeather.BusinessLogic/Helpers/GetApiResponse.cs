@@ -14,7 +14,7 @@ namespace OpenWeather.BusinessLogic.Helpers
         {
             this.httpClient = httpClient;
         }
-        public async static Task<Tuple<ResponseWeather, WeatherInfo>> GetResponseAsync(HttpClient httpClient, string url)
+        public async static Task<WeatherInfo> GetResponseAsync(HttpClient httpClient, string url)
         {
             try
             {
@@ -25,24 +25,24 @@ namespace OpenWeather.BusinessLogic.Helpers
                 ResponseWeather rootObject = JsonConvert.DeserializeObject<ResponseWeather>(apiResponse);
 
                 DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-                DateTime normalDateTime = epoch.AddSeconds(rootObject.dt);
+                DateTime normalDateTime = epoch.AddSeconds(rootObject.Dt);
 
                 var weatherInfo = new WeatherInfo
                 {
-                    Visibility = rootObject.visibility,
+                    Name = rootObject.Name,
+                    Country = rootObject.Sys.Country,
                     Dt = normalDateTime,
-                    IdApi = rootObject.id,
-                    Name = rootObject.name,
-                    Country = rootObject.sys.country,
-                    Descrpition = rootObject.weather[0].description,
-                    Humidity = rootObject.main.humidity,
-                    WindSpeed = rootObject.wind.speed,
-                    TempFeelsLike = rootObject.main.feels_like,
-                    Temp = rootObject.main.temp,
-                    Icon = rootObject.weather[0].icon
+                    Temp = rootObject.Main.Temp,
+                    TempFeelsLike = rootObject.Main.TempFeelsLike,
+                    Descrpition = rootObject.Weather[0].Description,
+                    WindSpeed = rootObject.Wind.Speed,
+                    Humidity = rootObject.Main.Humidity,
+                    Pressure = rootObject.Main.Pressure,
+                    Visibility = rootObject.Visibility,
+                    Icon = rootObject.Weather[0].Icon
                 };
 
-                return Tuple.Create(rootObject, weatherInfo);
+                return weatherInfo;
             }
             catch (WebException webEx)
             {

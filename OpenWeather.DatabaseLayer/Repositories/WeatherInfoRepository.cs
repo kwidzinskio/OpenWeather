@@ -69,6 +69,7 @@ namespace OpenWeather.DatabaseLayer.Repositories
                 var weatherInfos = await context.WeatherInfos
                                .Where(e => e.Name.Equals(city))
                                .ToListAsync();
+
                 return weatherInfos;
             }
             catch(Exception ex)
