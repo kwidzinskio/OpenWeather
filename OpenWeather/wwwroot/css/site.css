@@ -14,11 +14,6 @@ html {
     }
 }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 html, body {
     height: 100%;
     margin: 0;
@@ -27,10 +22,10 @@ html, body {
 body {
     display: flex;
     flex-direction: column;
-    margin-bottom: 2rem;
+    min-height: 100vh;
 }
 
-.content {
+main {
     flex: 1;
 }
 
@@ -105,16 +100,27 @@ body {
     background-color: green;
 }
 
-.table, .footer{
-    margin: 0 1rem 1rem 1rem;
+.table {
+    margin: auto;
     width: auto;
+    font-size: 0.8em;
+}
+
+.content {
+    margin-top: 2rem;
 }
 
 .message {
-    margin-top: 1rem;
+    font-weight: 600;
 }
 
 .size-image {
     width: 3rem;
     height: 3rem;
+}
+
+.footer{
+    margin: 2rem 0 0.5rem 0.5rem;
+    font-style: italic;
+    font-size: 0.6rem;
 }

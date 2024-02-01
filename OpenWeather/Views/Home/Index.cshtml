@@ -33,7 +33,7 @@
 </div>
 @if (Model.WeatherInfos != null && Model.WeatherInfos.Any())
 {
-    <table class="table message">
+    <table class="table content">
         <thead>
         <tr>
             <th>City</th>
@@ -76,7 +76,7 @@
 }
 else
 {
-    <div class="container message">
+    <div class="container message content">
         <p>@Html.Raw(Model.Response)</p>
     </div>
 }
