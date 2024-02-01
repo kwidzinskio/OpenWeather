@@ -14,15 +14,18 @@ namespace OpenWeather.BusinessLogic.Helpers
         {
             this.httpClient = httpClient;
         }
-        public async static Task<WeatherInfo> GetResponseAsync(HttpClient httpClient, string urlOpenWeatherMap, string urlAirly)
+        public async static Task<WeatherInfo> GetResponseAsync(HttpClient httpClient, 
+            string urlOpenWeatherMap, 
+            string urlAirly,
+            string apiKeyAirly)
         {
             try
             {
-                /*                var response = await httpClient.GetAsync(urlOpenWeatherMap);
-                                response.EnsureSuccessStatusCode();
-                                var apiResponse = await response.Content.ReadAsStringAsync();*/
+                var responseOpenWeatherApp = await httpClient.GetAsync(urlOpenWeatherMap);
+                responseOpenWeatherApp.EnsureSuccessStatusCode();
+                var apiResponseOpenWeatherApp = await responseOpenWeatherApp.Content.ReadAsStringAsync();
 
-                httpClient.DefaultRequestHeaders.Add("apikey", "9ZjILXHLzBIHpBex0FTk7uMVrT7JOgNH");
+                httpClient.DefaultRequestHeaders.Add("apikey", apiKeyAirly);
                 HttpResponseMessage responseAirly = await httpClient.GetAsync(urlAirly);
                 responseAirly.EnsureSuccessStatusCode(); 
                 string apiResponseAirly = await responseAirly.Content.ReadAsStringAsync();

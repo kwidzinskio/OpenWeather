@@ -19,7 +19,8 @@ namespace OpenWeather.BusinessLogic.Services
     public class WeatherService : IWeatherService
     {
         private readonly IConfiguration _configuration;
-        private readonly string _apiKey;
+        private readonly string _apiKeyOpenWeatherApp;
+        private readonly string _apiKeyAirly;
         private readonly Cities _cities = new();
         private readonly IWeatherInfoRepository _weatherInfoRepository;
         private readonly IWeatherInfoRepositoryFactory _weatherInfoRepositoryFactory;
@@ -32,7 +33,8 @@ namespace OpenWeather.BusinessLogic.Services
         {
             _weatherInfoRepository = weatherInfoRepository;
             _configuration = configuration;
-            _apiKey = _configuration.GetSection("ApiKey").Value;
+            _apiKeyOpenWeatherApp = _configuration.GetSection("ApiKeyOpenWeatherApp").Value;
+            _apiKeyAirly = _configuration.GetSection("ApiKeyOpenAirly").Value;
             _weatherInfoRepositoryFactory = weatherInfoRepositoryFactory;
             _httpClient = httpClient;
         }
@@ -159,11 +161,11 @@ namespace OpenWeather.BusinessLogic.Services
 
             foreach (var city in _cities.Read())
             {
-                string urlOpenWeatherMap = $"https://api.openweathermap.org/data/2.5/weather?q={city.Name}&appid={_apiKey}&units=metric";
+                string urlOpenWeatherMap = $"https://api.openweathermap.org/data/2.5/weather?q={city.Name}&appid={_apiKeyOpenWeatherApp}&units=metric";
                 int? airlyId = _cities.FindAirlyIdByName(city.Name);
                 string urlAirly = $"https://airapi.airly.eu/v2/measurements/installation?installationId={airlyId.Value}";
 
-                var weatherInfo = await GetApiResponse.GetResponseAsync(_httpClient, urlOpenWeatherMap, urlAirly);
+                var weatherInfo = await GetApiResponse.GetResponseAsync(_httpClient, urlOpenWeatherMap, urlAirly, _apiKeyAirly);
 
                 await repository.AddWeatherInfo(weatherInfo);
             }
