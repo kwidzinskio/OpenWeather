@@ -20,7 +20,7 @@ namespace OpenWeather
             builder.Services.AddScoped<IWeatherService, WeatherService>();
             builder.Services.AddScoped<IWeatherInfoRepository, WeatherInfoRepository>();
             builder.Services.AddTransient<IWeatherInfoRepositoryFactory, WeatherInfoRepositoryFactory>();
-            //builder.Services.AddHostedService<WeatherBackgroundService>();
+            builder.Services.AddHostedService<WeatherBackgroundService>();
             builder.Services.AddHttpClient();
             var app = builder.Build();
 

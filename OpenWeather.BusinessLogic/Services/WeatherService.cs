@@ -4,12 +4,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using OpenWeather.BusinessLogic.Helpers;
 using OpenWeather.BusinessLogic.Models;
-using OpenWeather.DatabaseLayer.Context;
 using OpenWeather.DatabaseLayer.Entities;
 using OpenWeather.DatabaseLayer.Repositories;
 
@@ -22,7 +19,6 @@ namespace OpenWeather.BusinessLogic.Services
         private readonly string _apiKeyOpenWeatherApp;
         private readonly string _apiKeyAirly;
         private readonly Cities _cities = new();
-        private readonly IWeatherInfoRepository _weatherInfoRepository;
         private readonly IWeatherInfoRepositoryFactory _weatherInfoRepositoryFactory;
         private readonly HttpClient _httpClient;
 
@@ -31,7 +27,6 @@ namespace OpenWeather.BusinessLogic.Services
                               IWeatherInfoRepositoryFactory weatherInfoRepositoryFactory, 
                               HttpClient httpClient)
         {
-            _weatherInfoRepository = weatherInfoRepository;
             _configuration = configuration;
             _apiKeyOpenWeatherApp = _configuration.GetSection("ApiKeyOpenWeatherApp").Value;
             _apiKeyAirly = _configuration.GetSection("ApiKeyAirly").Value;
@@ -173,16 +168,21 @@ namespace OpenWeather.BusinessLogic.Services
         {
             var repository = _weatherInfoRepositoryFactory.Create();
 
-            foreach (var city in _cities.Read())
+            using (HttpClient client = new HttpClient())
             {
-                string urlOpenWeatherMap = $"https://api.openweathermap.org/data/2.5/weather?q={city.Name}&appid={_apiKeyOpenWeatherApp}&units=metric";
-                int? airlyId = _cities.FindAirlyIdByName(city.Name);
-                string urlAirly = $"https://airapi.airly.eu/v2/measurements/installation?installationId={airlyId.Value}";
+                GetApiResponse apiResponse = new GetApiResponse(repository);
 
-                var weatherInfo = await GetApiResponse.GetResponseAsync(_httpClient, urlOpenWeatherMap, urlAirly, _apiKeyAirly);
+                foreach (var city in _cities.Read())
+                {
+                    string urlOpenWeatherMap = $"https://api.openweathermap.org/data/2.5/weather?q={city.Name}&appid={_apiKeyOpenWeatherApp}&units=metric";
+                    int? airlyId = _cities.FindAirlyIdByName(city.Name);
+                    string urlAirly = $"https://airapi.airly.eu/v2/measurements/installation?installationId={airlyId.Value}";
 
-                await repository.AddWeatherInfo(weatherInfo);
-            }
+                    var weatherInfo = await apiResponse.GetResponseAsync(client, urlOpenWeatherMap, urlAirly, _apiKeyAirly, city.Name);
+
+                    await repository.AddWeatherInfo(weatherInfo);
+                }
+            } 
         }
     }
 }

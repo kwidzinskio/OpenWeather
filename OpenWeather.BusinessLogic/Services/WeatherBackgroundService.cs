@@ -1,9 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OpenWeather.BusinessLogic.Services;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 public class WeatherBackgroundService : BackgroundService
 {
@@ -13,6 +10,7 @@ public class WeatherBackgroundService : BackgroundService
     public WeatherBackgroundService(IServiceScopeFactory scopeFactory)
     {
         _scopeFactory = scopeFactory;
+
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

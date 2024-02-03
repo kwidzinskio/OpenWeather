@@ -77,5 +77,40 @@ namespace OpenWeather.DatabaseLayer.Repositories
                 throw;
             }
         }
+
+        public async Task<DateTime> GetLastDataTimeAsync(string city)
+        {
+            try
+            {
+                var cityLastRecordTime = await context.WeatherInfos
+                               .Where(e => e.Name.Equals(city))
+                               .OrderByDescending(e => e.Dt)
+                               .Select(e => e.Dt)
+                               .FirstOrDefaultAsync();
+
+                return cityLastRecordTime;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<WeatherInfo> GetLastAirlyDataAsync(string city)
+        {
+            try
+            {
+                var weatherInfos = await context.WeatherInfos
+                               .Where(e => e.Name.Equals(city))
+                               .OrderByDescending(e => e.Dt)
+                               .FirstOrDefaultAsync();
+
+                return weatherInfos;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

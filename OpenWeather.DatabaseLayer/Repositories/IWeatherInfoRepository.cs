@@ -13,5 +13,7 @@ namespace OpenWeather.DatabaseLayer.Repositories
         Task<WeatherInfo> GetCurrentWeather(string city);
         Task<List<WeatherInfo>> GetLimitedHistoryWeather(string city);
         Task<List<WeatherInfo>> GetHistoryWeather(string city);
+        Task<DateTime> GetLastDataTimeAsync(string city);
+        Task<WeatherInfo> GetLastAirlyDataAsync(string city);
     }
 }

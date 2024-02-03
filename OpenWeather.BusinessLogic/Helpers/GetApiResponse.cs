@@ -3,21 +3,25 @@ using System.IO;
 using System.Net;
 using Newtonsoft.Json;
 using OpenWeather.BusinessLogic.Models;
+using OpenWeather.BusinessLogic.Services;
 using OpenWeather.DatabaseLayer.Entities;
+using OpenWeather.DatabaseLayer.Repositories;
 
 namespace OpenWeather.BusinessLogic.Helpers
 {
     public class GetApiResponse
     {
-        private readonly HttpClient httpClient;
-        public GetApiResponse(HttpClient httpClient)
+        private readonly IWeatherInfoRepository _repository;
+        public GetApiResponse(IWeatherInfoRepository repository)
         {
-            this.httpClient = httpClient;
+            _repository = repository;
         }
-        public async static Task<WeatherInfo> GetResponseAsync(HttpClient httpClient, 
+        public async Task<WeatherInfo> GetResponseAsync(
+            HttpClient httpClient, 
             string urlOpenWeatherMap, 
             string urlAirly,
-            string apiKeyAirly)
+            string apiKeyAirly,
+            string city)
         {
             try
             {
@@ -28,12 +32,43 @@ namespace OpenWeather.BusinessLogic.Helpers
                 DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                 DateTime normalDateTime = epoch.AddSeconds(rootObjectOpenWeatherMap.Dt);
 
-                httpClient.DefaultRequestHeaders.Add("apikey", apiKeyAirly);
-                var responseAirly = await httpClient.GetAsync(urlAirly);
-                responseAirly.EnsureSuccessStatusCode(); 
-                string apiResponseAirly = await responseAirly.Content.ReadAsStringAsync();
-                httpClient.DefaultRequestHeaders.Remove("apikey");
-                ResponsePollution rootObjectAirly = JsonConvert.DeserializeObject<ResponsePollution>(apiResponseAirly);
+                DateTime? lastFetchTime = await _repository.GetLastDataTimeAsync(city); 
+                DateTime currentTime = DateTime.UtcNow;
+
+                ResponsePollution rootObjectAirly;
+
+                if (!lastFetchTime.HasValue || (currentTime - lastFetchTime.Value).TotalHours > 1)
+                {
+                    httpClient.DefaultRequestHeaders.Add("apikey", apiKeyAirly);
+                    var responseAirly = await httpClient.GetAsync(urlAirly);
+                    responseAirly.EnsureSuccessStatusCode();
+                    string apiResponseAirly = await responseAirly.Content.ReadAsStringAsync();
+                    httpClient.DefaultRequestHeaders.Remove("apikey");
+                    rootObjectAirly = JsonConvert.DeserializeObject<ResponsePollution>(apiResponseAirly);
+                }
+                else
+                {
+                    var lastCityRecord = await _repository.GetLastAirlyDataAsync(city);
+                    rootObjectAirly = new ResponsePollution
+                    {
+                        Current = new PollutionData
+                        {
+                            Values = new List<Value>
+                            {
+                                new Value { PM25Value = lastCityRecord.PM25 }
+                            },
+                            Indexes = new List<Models.Index>
+                            {
+                                new Models.Index
+                                {
+                                    Level = lastCityRecord.PollutionLevel,
+                                    Description = lastCityRecord.PollutionDescription,
+                                    Color = lastCityRecord.PollutionDescriptionColor
+                                }
+                            }
+                        }
+                    };
+                }
 
                 var weatherInfo = new WeatherInfo
                 {
