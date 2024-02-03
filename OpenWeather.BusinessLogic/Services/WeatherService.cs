@@ -15,23 +15,14 @@ namespace OpenWeather.BusinessLogic.Services
 {
     public class WeatherService : IWeatherService
     {
-        private readonly IConfiguration _configuration;
-        private readonly string _apiKeyOpenWeatherApp;
-        private readonly string _apiKeyAirly;
-        private readonly Cities _cities = new();
         private readonly IWeatherInfoRepositoryFactory _weatherInfoRepositoryFactory;
-        private readonly HttpClient _httpClient;
 
-        public WeatherService(IWeatherInfoRepository weatherInfoRepository, 
-                              IConfiguration configuration, 
-                              IWeatherInfoRepositoryFactory weatherInfoRepositoryFactory, 
-                              HttpClient httpClient)
+        public WeatherService(
+            IWeatherInfoRepository weatherInfoRepository, 
+            IWeatherInfoRepositoryFactory weatherInfoRepositoryFactory
+        )
         {
-            _configuration = configuration;
-            _apiKeyOpenWeatherApp = _configuration.GetSection("ApiKeyOpenWeatherApp").Value;
-            _apiKeyAirly = _configuration.GetSection("ApiKeyAirly").Value;
             _weatherInfoRepositoryFactory = weatherInfoRepositoryFactory;
-            _httpClient = httpClient;
         }
         public async Task<List<WeatherInfo>> GetCurrentWeather(List<string> cities)
         {
@@ -162,27 +153,6 @@ namespace OpenWeather.BusinessLogic.Services
             var stream = new MemoryStream(byteArray);
 
             return stream;
-        }
-
-        public async Task FetchApiWeatherSet()
-        {
-            var repository = _weatherInfoRepositoryFactory.Create();
-
-            using (HttpClient client = new HttpClient())
-            {
-                GetApiResponse apiResponse = new GetApiResponse(repository);
-
-                foreach (var city in _cities.Read())
-                {
-                    string urlOpenWeatherMap = $"https://api.openweathermap.org/data/2.5/weather?q={city.Name}&appid={_apiKeyOpenWeatherApp}&units=metric";
-                    int? airlyId = _cities.FindAirlyIdByName(city.Name);
-                    string urlAirly = $"https://airapi.airly.eu/v2/measurements/installation?installationId={airlyId.Value}";
-
-                    var weatherInfo = await apiResponse.GetResponseAsync(client, urlOpenWeatherMap, urlAirly, _apiKeyAirly, city.Name);
-
-                    await repository.AddWeatherInfo(weatherInfo);
-                }
-            } 
         }
     }
 }

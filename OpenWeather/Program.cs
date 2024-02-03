@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OpenWeather.BusinessLogic.Helpers;
+using OpenWeather.BusinessLogic.Models;
 using OpenWeather.BusinessLogic.Services;
 using OpenWeather.DatabaseLayer.Context;
 using OpenWeather.DatabaseLayer.Repositories;
@@ -22,6 +23,8 @@ namespace OpenWeather
             builder.Services.AddTransient<IWeatherInfoRepositoryFactory, WeatherInfoRepositoryFactory>();
             builder.Services.AddHostedService<WeatherBackgroundService>();
             builder.Services.AddHttpClient();
+            builder.Services.AddScoped<WeatherFetchService>();
+            builder.Services.AddSingleton<Cities>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -13,6 +13,5 @@ namespace OpenWeather.BusinessLogic.Services
         Task<List<WeatherInfo>> GetHistorytWeather(List<string> cities);
         Task<MemoryStream> ReportCurrentWeather(List<string> cities);
         Task<MemoryStream> ReportHistoryWeather(List<string> cities);
-        Task FetchApiWeatherSet();
     }
 }

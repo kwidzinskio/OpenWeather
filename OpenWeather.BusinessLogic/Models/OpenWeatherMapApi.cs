@@ -13,6 +13,7 @@ namespace OpenWeather.BusinessLogic.Models
         public double Temp { get; set; }
         public int Pressure { get; set; }
         public int Humidity { get; set; }
+        [JsonProperty("feels_like")]
         public double TempFeelsLike { get; set; }
     }
 
@@ -35,6 +36,5 @@ namespace OpenWeather.BusinessLogic.Models
         public int Dt { get; set; }
         public Sys Sys { get; set; }
         public string Name { get; set; }
-        public string Icon { get; set; }
     }
 }
