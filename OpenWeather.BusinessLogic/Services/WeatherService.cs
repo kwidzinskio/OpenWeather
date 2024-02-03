@@ -34,6 +34,7 @@ namespace OpenWeather.BusinessLogic.Services
                 var rootObject = await repository.GetCurrentWeather(city);
                 weatherInfos.Add(new WeatherInfo
                 {
+                    Id = rootObject.Id,
                     Name = rootObject.Name,
                     Country = rootObject.Country,
                     Temp = rootObject.Temp,
@@ -55,7 +56,7 @@ namespace OpenWeather.BusinessLogic.Services
             return weatherInfos;
         }
 
-        public async Task<List<WeatherInfo>> GetHistorytWeather(List<string> cities)
+        public async Task<List<WeatherInfo>> GetHistoryWeather(List<string> cities)
         {
             var repository = _weatherInfoRepositoryFactory.Create();
             List<WeatherInfo> weatherInfos = new List<WeatherInfo>();
@@ -67,6 +68,7 @@ namespace OpenWeather.BusinessLogic.Services
                 {
                     weatherInfos.Add(new WeatherInfo
                     {
+                        Id = rootObject.Id,
                         Name = rootObject.Name,
                         Country = rootObject.Country,
                         Temp = rootObject.Temp,

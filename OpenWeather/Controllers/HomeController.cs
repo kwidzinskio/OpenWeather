@@ -10,17 +10,18 @@ using OpenWeather.Models;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace OpenWeather.Controllers
 {
     public class HomeController : Controller
     {
         private readonly OpenWeatherApp openWeatherMap = new OpenWeatherApp();
-        private readonly IWeatherService weatherService;
+        private readonly IWeatherService _weatherService;
 
         public HomeController(IWeatherService weatherService)
         {
-            this.weatherService = weatherService;
+            _weatherService = weatherService;
         }
 
         public ActionResult Index()
@@ -38,18 +39,18 @@ namespace OpenWeather.Controllers
                 switch (action)
                 {
                     case "showLast":
-                        weatherInfos = await weatherService.GetCurrentWeather(cities);
+                        weatherInfos = await _weatherService.GetCurrentWeather(cities);
                         openWeatherMap.WeatherInfos = weatherInfos;
                         break;
                     case "showHistory":
-                        weatherInfos = await weatherService.GetHistorytWeather(cities);
+                        weatherInfos = await _weatherService.GetHistoryWeather(cities);
                         openWeatherMap.WeatherInfos = weatherInfos;
                         break;
                     case "downloadLast":
-                        var streamCurrent = await weatherService.ReportCurrentWeather(cities);
+                        var streamCurrent = await _weatherService.ReportCurrentWeather(cities);
                         return File(streamCurrent, "text/csv", "weatherData.csv");
                      case "downloadHistory":
-                        var streamHistory = await weatherService.ReportHistoryWeather(cities);
+                        var streamHistory = await _weatherService.ReportHistoryWeather(cities);
                         return File(streamHistory, "text/csv", "weatherData.csv");
                 }
             }
@@ -59,6 +60,40 @@ namespace OpenWeather.Controllers
             }
 
             return View(openWeatherMap);
+        }
+
+        [HttpGet("current")]
+        public async Task<IActionResult> GetCurrentWeatherInfoByCity(string city)
+        {
+            var cities = city.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                             .Select(c => c.Trim())
+                             .ToList();
+
+            var weatherInfo = await _weatherService.GetCurrentWeather(cities);
+
+            if (weatherInfo == null || !weatherInfo.Any())
+            {
+                return NotFound("Weather information for the specified citiy was not found.");
+            }
+
+            return Ok(weatherInfo[0]);
+        }
+
+        [HttpGet("history")]
+        public async Task<IActionResult> GetHistoricalWeatherInfoByCity(string city)
+        {
+            var cities = city.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                             .Select(c => c.Trim())
+                             .ToList();
+
+            var weatherInfos = await _weatherService.GetHistoryWeather(cities);
+
+            if (weatherInfos == null || !weatherInfos.Any())
+            {
+                return NotFound("Weather information for the specified citiy was not found.");
+            }
+
+            return Ok(weatherInfos);
         }
     }
 }

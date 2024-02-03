@@ -48,11 +48,10 @@ namespace OpenWeather.DatabaseLayer.Repositories
         {
             try
             {
-                string sqlQuery = "SELECT TOP 5 * FROM WeatherInfos WHERE Name = @city ORDER BY NEWID()";
-
                 var weatherInfos = await context.WeatherInfos
-                                                .FromSqlRaw(sqlQuery, new SqlParameter("@city", city))
-                                                .ToListAsync();
+                               .Where(e => e.Name.Equals(city))
+                               .OrderByDescending(e => e.Dt)
+                               .ToListAsync();
 
                 return weatherInfos;
             }
