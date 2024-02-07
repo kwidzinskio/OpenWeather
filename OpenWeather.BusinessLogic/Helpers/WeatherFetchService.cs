@@ -90,7 +90,7 @@ namespace OpenWeather.BusinessLogic.Helpers
             try
             {
                 var response = await httpClient.GetAsync(url);
-                response.EnsureSuccessStatusCode();
+            https://localhost:7076/response.EnsureSuccessStatusCode();
                 var apiResponse = await response.Content.ReadAsStringAsync();
                 var rootObject = JsonConvert.DeserializeObject<ResponseWeather>(apiResponse);
 

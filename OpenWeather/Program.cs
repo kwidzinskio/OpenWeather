@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using OpenWeather.BusinessLogic.Helpers;
 using OpenWeather.BusinessLogic.Models;
 using OpenWeather.BusinessLogic.Services;
@@ -25,6 +26,10 @@ namespace OpenWeather
             builder.Services.AddHttpClient();
             builder.Services.AddScoped<WeatherFetchService>();
             builder.Services.AddSingleton<Cities>();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Weather and Pollution API", Version = "v1" });
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -33,6 +38,11 @@ namespace OpenWeather
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+            }
+            else
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Weather and Pollution API"));
             }
 
             app.UseHttpsRedirection();
